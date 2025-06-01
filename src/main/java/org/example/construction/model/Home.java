@@ -10,6 +10,8 @@ import org.example.construction.pojo.HomeProjects;
 import org.example.construction.pojo.WhyChooseUs;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +25,7 @@ public class Home {
     @JdbcTypeCode(SqlTypes.JSON)
     About about;
     @JdbcTypeCode(SqlTypes.JSON)
-    List<HomeProjects> projects;
+    List<HomeProjects> projects = new ArrayList<>();
     @JdbcTypeCode(SqlTypes.JSON)
     List<WhyChooseUs> whyChooseUs;
     @JdbcTypeCode(SqlTypes.JSON)

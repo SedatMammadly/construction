@@ -1,4 +1,4 @@
-package org.example.construction.dto;
+package org.example.construction.pojo;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HomeProjectDto {
-    String projectSlug;
-    String image;
+public class ManagementStructure {
+    String paragraph;
 }

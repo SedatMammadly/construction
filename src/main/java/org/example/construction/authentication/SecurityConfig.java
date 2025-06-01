@@ -21,11 +21,11 @@ public class SecurityConfig {
 //       http.csrf((c) -> c
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                                .requestMatchers("/api/v1/auth/**","/api/v1/aboutUs/**","/api/v1/pageSection/**","/api/v1/home/**","/images/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .authorizeHttpRequests(authorizeRequests ->
+                                authorizeRequests.requestMatchers("/**").permitAll()
+//                .requestMatchers("/api/v1/auth/**",,"/api/v1/aboutUs/**","/api/v1/pageSection/**","/api/v1/home/**","/images/**").permitAll()
+//                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 )
-
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
                         .invalidateHttpSession(true)

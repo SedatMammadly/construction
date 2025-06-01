@@ -42,4 +42,9 @@ public class HomeController {
                                                   @RequestPart(required = false)MultipartFile icon) {
         return ResponseEntity.ok(homeService.updateWhyChooseUs(index,whyChooseUsDto,icon));
     }
+
+    @DeleteMapping("/delete/whyChooseUs/{index}")
+    public ResponseEntity<Home> deleteWhyChooseUs(@PathVariable int index) {
+        return ResponseEntity.ok(homeService.deleteWhyChooseUs(index));
+    }
 }

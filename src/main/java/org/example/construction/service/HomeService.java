@@ -14,6 +14,7 @@ import org.example.construction.repository.HomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,6 +31,8 @@ public class HomeService {
 
     public Home createHome(HomeRequest homeRequest, MultipartFile aboutImage, List<MultipartFile> icons) {
         Home home = pageMapper.homeDtoToEntity(homeRequest);
+        home.setProjects(new ArrayList<>());
+        home.setNews(new ArrayList<>());
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
                 String url = fileService.uploadFile(icons.get(i));
@@ -91,6 +94,17 @@ public class HomeService {
             String url = fileService.uploadFile(icon);
             home.getWhyChooseUs().get(realIndex).setIcon(url);
         }
+        return homeRepository.save(home);
+    }
+
+    public Home deleteWhyChooseUs(int index) {
+        int realIndex = index - 1;
+        Home home = homeRepository.findAll().getFirst();
+        String icon = home.getWhyChooseUs().get(realIndex).getIcon();
+        if (icon != null) {
+            fileService.removeFile(icon);
+        }
+        home.getWhyChooseUs().remove(realIndex);
         return homeRepository.save(home);
     }
 }
