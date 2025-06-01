@@ -1,0 +1,40 @@
+spring:
+  application:
+   name: construction
+  datasource:
+    url: jdbc:postgresql://localhost:5434/Construction
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      port: 6380
+      password: construction-redis-p@ss
+      connect-timeout: 60000
+      client-type: lettuce
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: serxan.babayev.06@gmail.com
+    password: klmp yxwd jtdz ptmn
+    properties:
+      mail.transport.protocol: smtp
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.debug: true
+
+validation-code:
+  expireDate: 5
+
+file:
+  image:
+   dir: ./uploads/images

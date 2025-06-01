@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  construction:
+    container_name: construction
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: Construction
+
+    ports:
+      - '5434:5432'
+    volumes:
+      - constructionData:/var/lib/postgresql/data
+    networks:
+      - construction_network
+
+  redis:
+    image: bitnami/redis:7.2
+    environment:
+      - REDIS_PASSWORD=construction-redis-p@ss
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6380:6379'
+    volumes:
+      - redis_data:/bitnami/redis/data
+    networks:
+      - construction_network
+
+volumes:
+  redis_data: {}
+  constructionData: {}
+
+networks:
+  construction_network:
+    driver: bridge
