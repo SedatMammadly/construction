@@ -66,12 +66,7 @@ public class ProjectService {
 
         Projects savedProject = projectsRepository.save(updatedProject);
         Home home = homeRepository.findAll().getFirst();
-
         home.getProjects().removeIf(hp -> hp.getProjectSlug().equals(oldSlug));
-        for(HomeProjects hp : home.getProjects()) {
-            System.out.println(hp.getProjectSlug());
-            System.out.println(hp.getProjectSlug() + "is equal  " + oldSlug + "  "+ oldSlug.equals(hp.getProjectSlug()));
-        }
         updatedProject.setSlug(slug);
         HomeProjects homeProjects = new HomeProjects();
         homeProjects.setProjectSlug(savedProject.getSlug());
