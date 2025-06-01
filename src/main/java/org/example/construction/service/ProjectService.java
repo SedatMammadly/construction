@@ -57,7 +57,6 @@ public class ProjectService {
         Projects updatedProject = pageMapper.updateProjectEntityFromDto(projects, projectDto);
 
         String slug = SlugUtil.toSlug(updatedProject.getName());
-        updatedProject.setSlug(slug);
 
         if (file != null) {
             fileService.removeFile(updatedProject.getImage());
@@ -73,6 +72,7 @@ public class ProjectService {
             System.out.println(hp.getProjectSlug());
             System.out.println(hp.getProjectSlug() + "is equal  " + oldSlug + "  "+ oldSlug.equals(hp.getProjectSlug()));
         }
+        updatedProject.setSlug(slug);
         HomeProjects homeProjects = new HomeProjects();
         homeProjects.setProjectSlug(savedProject.getSlug());
         homeProjects.setImage(savedProject.getImage());
