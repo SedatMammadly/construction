@@ -5,19 +5,19 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Data
 @Entity
 @Table
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class News {
+public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    String title;
-    String paragraph;
-    @ElementCollection
-    List<String> images = new ArrayList<String>();
+    String fullName;
+    String contactNumber;
+    String email;
+    String position;
+    @Column(columnDefinition = "TEXT")
+    String motivation;
+    String cvFile;
 }

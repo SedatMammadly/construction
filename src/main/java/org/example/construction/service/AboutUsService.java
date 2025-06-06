@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,25 +35,25 @@ public class AboutUsService {
         AboutUs aboutUs = pageMapper.aboutUsDtoToEntity(aboutUsRequest);
         if (!teamImages.isEmpty()) {
             for (int i = 0; i < aboutUs.getManageTeams().size(); i++) {
-                String image = fileService.uploadFile(teamImages.get(i));
+                String image = fileService.uploadFile(teamImages.get(i),"image");
                 aboutUs.getManageTeams().get(i).setImage(image);
             }
         }
         if (!missionIcons.isEmpty()) {
             for (int i = 0; i < aboutUs.getMissions().size(); i++) {
-                String image = fileService.uploadFile(missionIcons.get(i));
+                String image = fileService.uploadFile(missionIcons.get(i),"image");
                 aboutUs.getMissions().get(i).setIcon(image);
             }
         }
         if (!certificates.isEmpty()) {
             for (MultipartFile certificate : certificates) {
-                String image = fileService.uploadFile(certificate);
+                String image = fileService.uploadFile(certificate,"image");
                 aboutUs.getCertificates().add(image);
             }
         }
         if (!valueIcons.isEmpty()) {
             for (int i = 0; i < aboutUs.getValues().size(); i++) {
-                String image = fileService.uploadFile(valueIcons.get(i));
+                String image = fileService.uploadFile(valueIcons.get(i),"image");
                 aboutUs.getValues().get(i).setIcon(image);
             }
         }
@@ -66,7 +65,7 @@ public class AboutUsService {
         Missions missions = pojoMapper.missionsDtoToPojo(missionsDto);
         aboutUs.getMissions().add(missions);
         if (icon != null) {
-            String image = fileService.uploadFile(icon);
+            String image = fileService.uploadFile(icon,"image");
             aboutUs.getMissions().getLast().setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -79,7 +78,7 @@ public class AboutUsService {
         aboutUs.getMissions().get(realIndex).setTitle(missions.getTitle());
         aboutUs.getMissions().get(realIndex).setDescription(missions.getDescription());
         if (icon != null) {
-            String image = fileService.uploadFile(icon);
+            String image = fileService.uploadFile(icon,"image");
             aboutUs.getMissions().get(realIndex).setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -101,7 +100,7 @@ public class AboutUsService {
         Values values = pojoMapper.valuesDtoToPojo(valuesDto);
         aboutUs.getValues().add(values);
         if (icon != null) {
-            String image = fileService.uploadFile(icon);
+            String image = fileService.uploadFile(icon,"image");
             aboutUs.getValues().getLast().setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -114,7 +113,7 @@ public class AboutUsService {
         aboutUs.getValues().get(realIndex).setParagraph(values.getParagraph());
         aboutUs.getValues().get(realIndex).setTitle(values.getTitle());
         if (icon != null) {
-            String image = fileService.uploadFile(icon);
+            String image = fileService.uploadFile(icon,"image");
             aboutUs.getValues().get(realIndex).setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -164,7 +163,7 @@ public class AboutUsService {
         if (image != null) {
             String currentImage = aboutUs.getManageTeams().get(realIndex).getImage();
             fileService.removeFile(currentImage);
-            String newImage = fileService.uploadFile(image);
+            String newImage = fileService.uploadFile(image,"image");
             aboutUs.getManageTeams().get(realIndex).setImage(newImage);
         }
         return aboutUsRepository.save(aboutUs);
@@ -181,7 +180,7 @@ public class AboutUsService {
     public AboutUs addCertificate(MultipartFile file) {
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         if (file != null) {
-            String image = fileService.uploadFile(file);
+            String image = fileService.uploadFile(file,"image");
             aboutUs.getCertificates().add(image);
         }
         return aboutUsRepository.save(aboutUs);

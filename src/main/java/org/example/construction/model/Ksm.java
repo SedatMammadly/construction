@@ -4,20 +4,21 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.example.construction.pojo.KsmCard;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
 @Table
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class News {
+public class Ksm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    String title;
-    String paragraph;
-    @ElementCollection
-    List<String> images = new ArrayList<String>();
+    @JdbcTypeCode(SqlTypes.JSON)
+    List<KsmCard>ksmCards;
+
 }

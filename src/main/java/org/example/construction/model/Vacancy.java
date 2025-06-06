@@ -4,20 +4,26 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @Entity
 @Table
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class News {
+public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String title;
-    String paragraph;
+    @Column(columnDefinition = "TEXT")
+    String content;
     @ElementCollection
-    List<String> images = new ArrayList<String>();
+    List<String> images;
+    @CreationTimestamp
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    LocalDateTime createdAt;
 }

@@ -9,10 +9,16 @@ import java.nio.file.Paths;
 public class FileConfig {
     @Value("${file.image.dir}")
     private String imageDir;
+    @Value("${file.dir}")
+    private String fileDir;
 
-    public Path getFileStorageLocation() {
+    public Path getImgFileStorageLocation() {
         return Paths.get(imageDir).toAbsolutePath().normalize();
     }
+    public Path getFileStorageLocation() {
+        return Paths.get(fileDir).toAbsolutePath().normalize();
+    }
+
 
 
 }

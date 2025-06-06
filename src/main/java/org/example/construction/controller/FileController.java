@@ -16,15 +16,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
-public class ImageController {
-    @Value("${file.image.dir}")
-    private String imageDir;
+public class FileController {
+    @Value("${file.dir}")
+    private String fileDir;
 
-    @GetMapping("/{filename:.+}")
-    public ResponseEntity<UrlResource> showImage(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get(imageDir).resolve(filename).normalize();
+
+    @GetMapping("/cv/{filename:.+}")
+    public ResponseEntity<UrlResource> downloadFile(@PathVariable String filename) throws IOException {
+        Path filePath = Paths.get(fileDir).resolve(filename).normalize();
         UrlResource resource = new UrlResource(filePath.toUri());
         if (!resource.exists()) {
             return ResponseEntity.notFound().build();
@@ -32,6 +33,8 @@ public class ImageController {
         String contentType = Files.probeContentType(filePath);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                 .body(resource);
     }
+
 }

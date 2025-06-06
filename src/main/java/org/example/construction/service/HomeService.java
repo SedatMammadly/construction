@@ -1,7 +1,6 @@
 package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.example.construction.dto.AboutDto;
 import org.example.construction.dto.HomeRequest;
 import org.example.construction.dto.WhyChooseUsDto;
@@ -35,12 +34,12 @@ public class HomeService {
         home.setNews(new ArrayList<>());
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i));
+                String url = fileService.uploadFile(icons.get(i),"image");
                 home.getWhyChooseUs().get(i).setIcon(url);
             }
         }
         if (aboutImage != null) {
-            String url = fileService.uploadFile(aboutImage);
+            String url = fileService.uploadFile(aboutImage,"image");
             home.getAbout().setImage(url);
         }
         return homeRepository.save(home);
@@ -57,7 +56,7 @@ public class HomeService {
             if ( image != null){
                 fileService.removeFile(image);
             }
-            String url = fileService.uploadFile(aboutImage);
+            String url = fileService.uploadFile(aboutImage,"image");
             home.getAbout().setImage(url);
         }
         return homeRepository.save(home);
@@ -72,7 +71,7 @@ public class HomeService {
         }
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i));
+                String url = fileService.uploadFile(icons.get(i),"image");
                 home.getWhyChooseUs().get(i).setIcon(url);
             }
         }
@@ -91,7 +90,7 @@ public class HomeService {
             if (icon1 != null) {
                 fileService.removeFile(icon1);
             }
-            String url = fileService.uploadFile(icon);
+            String url = fileService.uploadFile(icon,"image");
             home.getWhyChooseUs().get(realIndex).setIcon(url);
         }
         return homeRepository.save(home);

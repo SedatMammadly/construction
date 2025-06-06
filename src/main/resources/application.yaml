@@ -1,6 +1,6 @@
 spring:
   application:
-   name: construction
+    name: construction
   datasource:
     url: jdbc:postgresql://localhost:5434/Construction
     username: root
@@ -36,5 +36,6 @@ validation-code:
   expireDate: 5
 
 file:
+  dir: ./uploads/files
   image:
-   dir: ./uploads/images
+    dir: ./uploads/images

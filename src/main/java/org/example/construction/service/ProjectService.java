@@ -13,7 +13,6 @@ import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -38,7 +37,7 @@ public class ProjectService {
         String slug = SlugUtil.toSlug(projects.getName());
         projects.setSlug(slug);
         if (file != null) {
-            String image = fileService.uploadFile(file);
+            String image = fileService.uploadFile(file,"image");
             projects.setImage(image);
         }
         Home home = homeRepository.findAll().getFirst();
@@ -60,7 +59,7 @@ public class ProjectService {
 
         if (file != null) {
             fileService.removeFile(updatedProject.getImage());
-            String image = fileService.uploadFile(file);
+            String image = fileService.uploadFile(file,"image");
             updatedProject.setImage(image);
         }
 
