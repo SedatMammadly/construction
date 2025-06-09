@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class KsmController {
 
     @PostMapping
     public ResponseEntity<Ksm> addKsmCards(@RequestPart(name = "request") List<KsmCardDto> KsmCardDtos,
-                                           @RequestPart(required = false) List<MultipartFile> icons) {
+                                           @RequestPart(required = false) List<MultipartFile> icons) throws IOException {
         Ksm ksm = ksmService.addKsmCards(KsmCardDtos, icons);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
@@ -33,7 +34,7 @@ public class KsmController {
     @PutMapping("/update/ksmCard/{index}")
     public ResponseEntity<Ksm> updateKsmCard(@PathVariable int index, @RequestPart(name = "request") KsmCardDto ksmCardDto,
                                              @RequestPart(required = false) MultipartFile icon,
-                                             @RequestPart(required = false) List<MultipartFile> images) {
+                                             @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         Ksm ksm = ksmService.updateKsmCard(index, ksmCardDto, icon, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }

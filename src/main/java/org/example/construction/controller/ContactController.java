@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,14 +25,14 @@ public class ContactController {
 
     @PostMapping
     public ResponseEntity<Contact> addContactCards(@RequestPart(name = "request") List<ContactCardDto> ContactCardDtos,
-                                   @RequestPart(required = false) List<MultipartFile> icons) {
+                                   @RequestPart(required = false) List<MultipartFile> icons) throws IOException {
         Contact contact = contactService.addContactCards(ContactCardDtos, icons);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
     @PutMapping("/update/contactCard/{index}")
     public ResponseEntity<Contact> updateContactCard(@PathVariable int index,@RequestPart(name = "request") ContactCardDto ContactCardDto,
-                                                     @RequestPart(required = false) MultipartFile icon){
+                                                     @RequestPart(required = false) MultipartFile icon) throws IOException {
         Contact contact = contactService.updateContactCard(index, ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }

@@ -13,6 +13,7 @@ import org.example.construction.repository.HomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,24 +29,24 @@ public class HomeService {
         return homeRepository.findAll().getFirst();
     }
 
-    public Home createHome(HomeRequest homeRequest, MultipartFile aboutImage, List<MultipartFile> icons) {
+    public Home createHome(HomeRequest homeRequest, MultipartFile aboutImage, List<MultipartFile> icons) throws IOException {
         Home home = pageMapper.homeDtoToEntity(homeRequest);
         home.setProjects(new ArrayList<>());
         home.setNews(new ArrayList<>());
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i),"image");
+                String url = fileService.uploadFile(icons.get(i));
                 home.getWhyChooseUs().get(i).setIcon(url);
             }
         }
         if (aboutImage != null) {
-            String url = fileService.uploadFile(aboutImage,"image");
+            String url = fileService.uploadFile(aboutImage);
             home.getAbout().setImage(url);
         }
         return homeRepository.save(home);
     }
 
-    public Home updateAbout(AboutDto aboutDto, MultipartFile aboutImage) {
+    public Home updateAbout(AboutDto aboutDto, MultipartFile aboutImage) throws IOException {
         Home home = homeRepository.findAll().getFirst();
         if (aboutDto != null) {
             About about = pojoMapper.aboutDtoToPojo(aboutDto);
@@ -56,13 +57,13 @@ public class HomeService {
             if ( image != null){
                 fileService.removeFile(image);
             }
-            String url = fileService.uploadFile(aboutImage,"image");
+            String url = fileService.uploadFile(aboutImage);
             home.getAbout().setImage(url);
         }
         return homeRepository.save(home);
     }
 
-    public Home updateWhyChooseUs(List<WhyChooseUsDto> whyChooseUsDtoList, List<MultipartFile> icons) {
+    public Home updateWhyChooseUs(List<WhyChooseUsDto> whyChooseUsDtoList, List<MultipartFile> icons) throws IOException {
         Home home = homeRepository.findAll().getFirst();
         if (!whyChooseUsDtoList.isEmpty()) {
             home.getWhyChooseUs().clear();
@@ -71,14 +72,14 @@ public class HomeService {
         }
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i),"image");
+                String url = fileService.uploadFile(icons.get(i));
                 home.getWhyChooseUs().get(i).setIcon(url);
             }
         }
         return homeRepository.save(home);
     }
 
-    public Home updateWhyChooseUs(int index, WhyChooseUsDto whyChooseUsDto, MultipartFile icon) {
+    public Home updateWhyChooseUs(int index, WhyChooseUsDto whyChooseUsDto, MultipartFile icon) throws IOException {
         Home home = homeRepository.findAll().getFirst();
         int realIndex = index - 1;
         if (whyChooseUsDto != null) {
@@ -90,7 +91,7 @@ public class HomeService {
             if (icon1 != null) {
                 fileService.removeFile(icon1);
             }
-            String url = fileService.uploadFile(icon,"image");
+            String url = fileService.uploadFile(icon);
             home.getWhyChooseUs().get(realIndex).setIcon(url);
         }
         return homeRepository.save(home);

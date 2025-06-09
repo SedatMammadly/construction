@@ -9,6 +9,7 @@ import org.example.construction.repository.KsmRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class KsmService {
         return ksmRepository.findAll().getFirst();
     }
 
-    public Ksm addKsmCards(List<KsmCardDto> ksmCardDtos, List<MultipartFile> icons) {
+    public Ksm addKsmCards(List<KsmCardDto> ksmCardDtos, List<MultipartFile> icons) throws IOException {
         Ksm ksm = new Ksm();
         List<KsmCard> ksmCards = new ArrayList<>();
         for (KsmCardDto ksmCardDto : ksmCardDtos) {
@@ -32,7 +33,7 @@ public class KsmService {
         }
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String iconFile = fileService.uploadFile(icons.get(i), "image");
+                String iconFile = fileService.uploadFile(icons.get(i));
                 ksmCards.get(i).setIcon(iconFile);
             }
         }
@@ -40,18 +41,18 @@ public class KsmService {
         return ksmRepository.save(ksm);
     }
 
-    public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon,List<MultipartFile> images) {
+    public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon,List<MultipartFile> images) throws IOException {
         Ksm ksm = ksmRepository.findAll().getFirst();
         List<KsmCard> ksmCards = ksm.getKsmCards();
         List<String>imagesList = new ArrayList<>();
         ksmCards.set(index, pojoMapper.ksmCardDtoToPojo(ksmCardDto));
         if (icon != null) {
-            String iconFile = fileService.uploadFile(icon, "image");
+            String iconFile = fileService.uploadFile(icon);
             ksmCards.get(index).setIcon(iconFile);
         }
         if (images != null) {
             for (int i = 0; i < images.size(); i++) {
-                String imageFile = fileService.uploadFile(images.get(i), "image");
+                String imageFile = fileService.uploadFile(images.get(i));
                 imagesList.add(imageFile);
             }
         }

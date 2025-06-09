@@ -12,6 +12,7 @@ import org.example.construction.repository.NewsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,12 +33,12 @@ public class NewsService {
         return newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
     }
 
-    public News save(NewsDto newsDto, List<MultipartFile> images) {
+    public News save(NewsDto newsDto, List<MultipartFile> images) throws IOException {
         News news = pageMapper.newsDtoToEntity(newsDto);
         List<String> imageList = new ArrayList<>();
         if (images != null) {
             for (MultipartFile file : images) {
-                String image = fileService.uploadFile(file, "image");
+                String image = fileService.uploadFile(file);
                 imageList.add(image);
             }
             news.setImages(imageList);
@@ -47,27 +48,18 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    public News update(int id, NewsUpdateDto newsUpdateDto, List<MultipartFile> images) {
+    public News update(int id, NewsUpdateDto newsUpdateDto, List<MultipartFile> images) throws IOException {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
         List<String> oldImages = news.getImages();
         List<String> toRemove = new ArrayList<>();
         News savedNews = pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
         for (String image : oldImages) {
-            if(!newsUpdateDto.getImages().contains(image)) {
+            if (!newsUpdateDto.getImages().contains(image)) {
                 toRemove.add(image);
                 fileService.removeFile(image);
             }
         }
-        oldImages.removeAll(toRemove);
-        if (images != null) {
-            for (MultipartFile imageFile : images) {
-                String fileUrl = fileService.switchToUrl(Objects.requireNonNull(imageFile.getOriginalFilename()), "image");
-                if (!oldImages.contains(fileUrl)) {
-                    fileService.uploadFile(imageFile, "image");
-                    oldImages.add(fileUrl);
-                }
-            }
-        }
+        fileService.deleteFiles(oldImages);
 
 
         news.setImages(oldImages);

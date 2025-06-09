@@ -11,6 +11,8 @@ import org.example.construction.service.AboutUsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,7 @@ public class AboutUsController {
                                                  @RequestPart(required = false) List<MultipartFile> teamImages,
                                                  @RequestPart(required = false) List<MultipartFile> missionIcons,
                                                  @RequestPart(required = false) List<MultipartFile> certificates,
-                                                 @RequestPart(required = false) List<MultipartFile> valueIcons) {
+                                                 @RequestPart(required = false) List<MultipartFile> valueIcons) throws IOException {
         return ResponseEntity.ok(aboutUsService.createAboutUs(aboutUsRequest,
                 teamImages,
                 missionIcons, certificates, valueIcons));
@@ -37,25 +39,25 @@ public class AboutUsController {
 
     @PutMapping("/update/missions/add")
     public ResponseEntity<AboutUs> addMissions(@RequestPart(name = "request") MissionsDto missionsDto,
-                                               @RequestPart(required = false) MultipartFile icon) {
+                                               @RequestPart(required = false) MultipartFile icon) throws IOException {
         return ResponseEntity.ok(aboutUsService.addNewMission(missionsDto, icon));
     }
 
     @PutMapping("/update/missions/{index}")
     public ResponseEntity<AboutUs> updateMission(@PathVariable int index, @RequestPart(required = false, name = "request") MissionsDto missionsDto,
-                                                 @RequestPart(required = false) MultipartFile icon) {
+                                                 @RequestPart(required = false) MultipartFile icon) throws IOException {
         return ResponseEntity.ok(aboutUsService.updateMission(missionsDto, icon, index));
     }
 
     @PutMapping("/update/values/add")
     public ResponseEntity<AboutUs> addValue(@RequestPart(name = "request") ValuesDto valuesDto,
-                                            @RequestPart(required = false) MultipartFile icon) {
+                                            @RequestPart(required = false) MultipartFile icon) throws IOException {
         return ResponseEntity.ok(aboutUsService.addNewValue(valuesDto, icon));
     }
 
     @PutMapping("/update/values/{index}")
     public ResponseEntity<AboutUs> updateValue(@PathVariable int index, @RequestPart(required = false, name = "request") ValuesDto valuesDto,
-                                               @RequestPart(required = false) MultipartFile icon) {
+                                               @RequestPart(required = false) MultipartFile icon) throws IOException {
         return ResponseEntity.ok(aboutUsService.updateValue(valuesDto, icon, index));
     }
 
@@ -87,7 +89,7 @@ public class AboutUsController {
     @PutMapping("/update/teamManage/{index}")
     public ResponseEntity<AboutUs>updateManageTeam(@PathVariable int index,
                                                    @RequestPart(required = false,name = "request") ManageTeamDto manageTeamDto,
-                                                   @RequestPart(required = false) MultipartFile image ) {
+                                                   @RequestPart(required = false) MultipartFile image ) throws IOException {
         return ResponseEntity.ok(aboutUsService.updateManageTeam(index,manageTeamDto,image));
     }
 
@@ -97,7 +99,7 @@ public class AboutUsController {
     }
 
     @PutMapping("/update/certificates/add")
-    public ResponseEntity<AboutUs> addNewCertificate(@RequestPart MultipartFile certificate) {
+    public ResponseEntity<AboutUs> addNewCertificate(@RequestPart MultipartFile certificate) throws IOException {
         return ResponseEntity.ok(aboutUsService.addCertificate(certificate));
     }
 

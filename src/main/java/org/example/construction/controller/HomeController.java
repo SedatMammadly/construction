@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,19 +28,19 @@ public class HomeController {
     @PostMapping
     public ResponseEntity<Home> createHome(@RequestPart HomeRequest request,
                                            @RequestPart(required = false) MultipartFile aboutImage,
-                                           @RequestPart(required = false) List<MultipartFile> icons) {
+                                           @RequestPart(required = false) List<MultipartFile> icons) throws IOException {
         return ResponseEntity.ok(homeService.createHome(request, aboutImage, icons));
     }
 
     @PutMapping("/update/about")
     public ResponseEntity<Home> updateAbout(@RequestPart(required = false,name = "request") AboutDto aboutDto,
-                                            @RequestPart(required = false) MultipartFile aboutImage) {
+                                            @RequestPart(required = false) MultipartFile aboutImage) throws IOException {
         return ResponseEntity.ok(homeService.updateAbout(aboutDto, aboutImage));
     }
 
     @PutMapping("/update/whyChooseUs/{index}")
     public ResponseEntity<Home> updateWhyChooseUs(@PathVariable int index,@RequestPart(required = false,name = "request") WhyChooseUsDto whyChooseUsDto,
-                                                  @RequestPart(required = false)MultipartFile icon) {
+                                                  @RequestPart(required = false)MultipartFile icon) throws IOException {
         return ResponseEntity.ok(homeService.updateWhyChooseUs(index,whyChooseUsDto,icon));
     }
 

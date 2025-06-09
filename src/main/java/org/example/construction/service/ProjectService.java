@@ -13,6 +13,7 @@ import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -32,12 +33,12 @@ public class ProjectService {
         return projectsRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
     }
 
-    public Projects addProject(ProjectRequest projectDto, MultipartFile file) {
+    public Projects addProject(ProjectRequest projectDto, MultipartFile file) throws IOException {
         Projects projects = pageMapper.projectDtoToEntity(projectDto);
         String slug = SlugUtil.toSlug(projects.getName());
         projects.setSlug(slug);
         if (file != null) {
-            String image = fileService.uploadFile(file,"image");
+            String image = fileService.uploadFile(file );
             projects.setImage(image);
         }
         Home home = homeRepository.findAll().getFirst();
@@ -49,7 +50,7 @@ public class ProjectService {
         return projectsRepository.save(projects);
     }
 
-    public Projects updateProject(ProjectUpdateDto projectDto, MultipartFile file, Integer id) {
+    public Projects updateProject(ProjectUpdateDto projectDto, MultipartFile file, Integer id) throws IOException {
         Projects projects = projectsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
         String oldSlug = projects.getSlug();
@@ -59,7 +60,7 @@ public class ProjectService {
 
         if (file != null) {
             fileService.removeFile(updatedProject.getImage());
-            String image = fileService.uploadFile(file,"image");
+            String image = fileService.uploadFile(file);
             updatedProject.setImage(image);
         }
 
