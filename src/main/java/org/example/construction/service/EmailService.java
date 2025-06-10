@@ -19,6 +19,9 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
+    @Value("${validation-code.expireDate}")
+    private Long expirationDate;
+
     public void sendVerificationCode(String email) {
         SimpleMailMessage message = new SimpleMailMessage();
         String verificationCode = RandomStringUtils.randomNumeric(6);
@@ -27,6 +30,7 @@ public class EmailService {
         message.setText(verificationCode);
         message.setSubject("Your Verification Code:");
         mailSender.send(message);
+        redisTokenService.saveToken(email,verificationCode,expirationDate);
     }
 
 
