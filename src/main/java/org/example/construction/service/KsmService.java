@@ -42,13 +42,14 @@ public class KsmService {
     }
 
     public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon,List<MultipartFile> images) throws IOException {
+        int realIndex = index-1;
         Ksm ksm = ksmRepository.findAll().getFirst();
         List<KsmCard> ksmCards = ksm.getKsmCards();
         List<String>imagesList = new ArrayList<>();
-        ksmCards.set(index, pojoMapper.ksmCardDtoToPojo(ksmCardDto));
+        ksmCards.set(realIndex, pojoMapper.ksmCardDtoToPojo(ksmCardDto));
         if (icon != null) {
             String iconFile = fileService.uploadFile(icon);
-            ksmCards.get(index).setIcon(iconFile);
+            ksmCards.get(realIndex).setIcon(iconFile);
         }
         if (images != null) {
             for (int i = 0; i < images.size(); i++) {
@@ -56,23 +57,25 @@ public class KsmService {
                 imagesList.add(imageFile);
             }
         }
-        ksmCards.get(index).setImages(imagesList);
+        ksmCards.get(realIndex).setImages(imagesList);
         ksm.setKsmCards(ksmCards);
         return ksmRepository.save(ksm);
     }
 
     public void deleteKsmCard(int index) {
+        int realIndex = index-1;
         Ksm ksm = ksmRepository.findAll().getFirst();
         List<KsmCard> ksmCards = ksm.getKsmCards();
-        List<String>imagesList = ksmCards.get(index).getImages();
+        List<String>imagesList = ksmCards.get(realIndex).getImages();
         if (imagesList != null) {
             for (int i = 0; i < imagesList.size(); i++) {
                 String imageFile = imagesList.get(i);
                 fileService.removeFile(imageFile);
             }
         }
-        ksmCards.remove(index);
-        fileService.removeFile(ksmCards.get(index).getIcon());
+        fileService.removeFile(ksmCards.get(realIndex).getIcon());
+        ksmCards.remove(realIndex);
+
     }
 
 }
