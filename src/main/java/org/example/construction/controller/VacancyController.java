@@ -3,7 +3,9 @@ package org.example.construction.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ApplicantDto;
 import org.example.construction.dto.VacancyDto;
+import org.example.construction.model.Applicant;
 import org.example.construction.model.Vacancy;
+import org.example.construction.repository.ApplicantRepository;
 import org.example.construction.service.VacancyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacancyController {
     private final VacancyService vacancyService;
-
+private final ApplicantRepository applicantRepository;
     @GetMapping("/{id}")
     public ResponseEntity<Vacancy> getById(@PathVariable int id) {
         return ResponseEntity.ok(vacancyService.findById(id));
@@ -28,6 +30,10 @@ public class VacancyController {
     @GetMapping
     public ResponseEntity<List<Vacancy>> getAll() {
         return ResponseEntity.ok(vacancyService.findAll());
+    }
+    @GetMapping("/applicant")
+    public ResponseEntity<List<Applicant>> getAllApplicants() {
+        return ResponseEntity.ok(applicantRepository.findAll());
     }
 
     @PostMapping("/apply")
