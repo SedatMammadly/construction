@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -30,13 +31,13 @@ public class VacancyController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<String> apply(@RequestPart(name = "request") ApplicantDto applicantDto, @RequestPart MultipartFile file) {
+    public ResponseEntity<String> apply(@RequestPart(name = "request") ApplicantDto applicantDto, @RequestPart MultipartFile file) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.apply(applicantDto,file));
     }
 
     @PostMapping
     public ResponseEntity<Vacancy> create(@RequestPart(name = "request") VacancyDto vacancyDto,
-                                       @RequestPart(required = false) List<MultipartFile> images) {
+                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         final var createdVacancy = vacancyService.save(vacancyDto, images);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(createdVacancy.getId()).toUri();

@@ -14,6 +14,7 @@ import org.example.construction.repository.AboutUsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -31,54 +32,54 @@ public class AboutUsService {
 
 
     public AboutUs createAboutUs(AboutUsRequest aboutUsRequest, List<MultipartFile> teamImages,
-                                 List<MultipartFile> missionIcons, List<MultipartFile> certificates, List<MultipartFile> valueIcons) {
+                                 List<MultipartFile> missionIcons, List<MultipartFile> certificates, List<MultipartFile> valueIcons) throws IOException {
         AboutUs aboutUs = pageMapper.aboutUsDtoToEntity(aboutUsRequest);
         if (!teamImages.isEmpty()) {
             for (int i = 0; i < aboutUs.getManageTeams().size(); i++) {
-                String image = fileService.uploadFile(teamImages.get(i),"image");
+                String image = fileService.uploadFile(teamImages.get(i));
                 aboutUs.getManageTeams().get(i).setImage(image);
             }
         }
         if (!missionIcons.isEmpty()) {
             for (int i = 0; i < aboutUs.getMissions().size(); i++) {
-                String image = fileService.uploadFile(missionIcons.get(i),"image");
+                String image = fileService.uploadFile(missionIcons.get(i));
                 aboutUs.getMissions().get(i).setIcon(image);
             }
         }
         if (!certificates.isEmpty()) {
             for (MultipartFile certificate : certificates) {
-                String image = fileService.uploadFile(certificate,"image");
+                String image = fileService.uploadFile(certificate);
                 aboutUs.getCertificates().add(image);
             }
         }
         if (!valueIcons.isEmpty()) {
             for (int i = 0; i < aboutUs.getValues().size(); i++) {
-                String image = fileService.uploadFile(valueIcons.get(i),"image");
+                String image = fileService.uploadFile(valueIcons.get(i));
                 aboutUs.getValues().get(i).setIcon(image);
             }
         }
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs addNewMission(MissionsDto missionsDto, MultipartFile icon) {
+    public AboutUs addNewMission(MissionsDto missionsDto, MultipartFile icon) throws IOException {
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         Missions missions = pojoMapper.missionsDtoToPojo(missionsDto);
         aboutUs.getMissions().add(missions);
         if (icon != null) {
-            String image = fileService.uploadFile(icon,"image");
+            String image = fileService.uploadFile(icon);
             aboutUs.getMissions().getLast().setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs updateMission(MissionsDto missionsDto, MultipartFile icon, int index) {
+    public AboutUs updateMission(MissionsDto missionsDto, MultipartFile icon, int index) throws IOException {
         int realIndex = index - 1;
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         Missions missions = pojoMapper.missionsDtoToPojo(missionsDto);
         aboutUs.getMissions().get(realIndex).setTitle(missions.getTitle());
         aboutUs.getMissions().get(realIndex).setDescription(missions.getDescription());
         if (icon != null) {
-            String image = fileService.uploadFile(icon,"image");
+            String image = fileService.uploadFile(icon);
             aboutUs.getMissions().get(realIndex).setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -95,25 +96,25 @@ public class AboutUsService {
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs addNewValue(ValuesDto valuesDto, MultipartFile icon) {
+    public AboutUs addNewValue(ValuesDto valuesDto, MultipartFile icon) throws IOException {
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         Values values = pojoMapper.valuesDtoToPojo(valuesDto);
         aboutUs.getValues().add(values);
         if (icon != null) {
-            String image = fileService.uploadFile(icon,"image");
+            String image = fileService.uploadFile(icon);
             aboutUs.getValues().getLast().setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs updateValue(ValuesDto valuesDto, MultipartFile icon, int index) {
+    public AboutUs updateValue(ValuesDto valuesDto, MultipartFile icon, int index) throws IOException {
         int realIndex = index - 1;
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         Values values = pojoMapper.valuesDtoToPojo(valuesDto);
         aboutUs.getValues().get(realIndex).setParagraph(values.getParagraph());
         aboutUs.getValues().get(realIndex).setTitle(values.getTitle());
         if (icon != null) {
-            String image = fileService.uploadFile(icon,"image");
+            String image = fileService.uploadFile(icon);
             aboutUs.getValues().get(realIndex).setIcon(image);
         }
         return aboutUsRepository.save(aboutUs);
@@ -151,7 +152,7 @@ public class AboutUsService {
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs updateManageTeam(int index, ManageTeamDto manageTeamDto, MultipartFile image) {
+    public AboutUs updateManageTeam(int index, ManageTeamDto manageTeamDto, MultipartFile image) throws IOException {
         int realIndex = index - 1;
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         ManageTeam manageTeam = pojoMapper.manageTeamDtoToPojo(manageTeamDto);
@@ -163,7 +164,7 @@ public class AboutUsService {
         if (image != null) {
             String currentImage = aboutUs.getManageTeams().get(realIndex).getImage();
             fileService.removeFile(currentImage);
-            String newImage = fileService.uploadFile(image,"image");
+            String newImage = fileService.uploadFile(image);
             aboutUs.getManageTeams().get(realIndex).setImage(newImage);
         }
         return aboutUsRepository.save(aboutUs);
@@ -177,10 +178,10 @@ public class AboutUsService {
         return aboutUsRepository.save(aboutUs);
     }
 
-    public AboutUs addCertificate(MultipartFile file) {
+    public AboutUs addCertificate(MultipartFile file) throws IOException {
         AboutUs aboutUs = aboutUsRepository.findAll().getFirst();
         if (file != null) {
-            String image = fileService.uploadFile(file,"image");
+            String image = fileService.uploadFile(file);
             aboutUs.getCertificates().add(image);
         }
         return aboutUsRepository.save(aboutUs);

@@ -1,5 +1,8 @@
 package org.example.construction.util;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 public class SlugUtil {
 
     public static String toSlug(String input) {

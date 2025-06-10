@@ -10,6 +10,7 @@ import org.example.construction.repository.NewsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ContactService {
         return contactRepository.findAll().getFirst();
     }
 
-    public Contact addContactCards(List<ContactCardDto> contactCardDtos, List<MultipartFile> icons) {
+    public Contact addContactCards(List<ContactCardDto> contactCardDtos, List<MultipartFile> icons) throws IOException {
         Contact contact = new Contact();
         List<ContactCard> contactCards = new ArrayList<>();
         for (ContactCardDto contactCardDto : contactCardDtos) {
@@ -33,7 +34,7 @@ public class ContactService {
         }
         if (icons != null) {
             for (int i = 0; i < icons.size(); i++) {
-                String iconFile = fileService.uploadFile(icons.get(i), "image");
+                String iconFile = fileService.uploadFile(icons.get(i));
                 contactCards.get(i).setIcon(iconFile);
             }
         }
@@ -41,12 +42,12 @@ public class ContactService {
         return contactRepository.save(contact);
     }
 
-    public Contact updateContactCard(int index, ContactCardDto contactCardDto, MultipartFile icon) {
+    public Contact updateContactCard(int index, ContactCardDto contactCardDto, MultipartFile icon) throws IOException {
         Contact contact = contactRepository.findAll().getFirst();
         List<ContactCard> contactCards = contact.getContactCards();
         contactCards.set(index, pojoMapper.contactCardDtoToPojo(contactCardDto));
         if (icon != null) {
-            String iconFile = fileService.uploadFile(icon, "image");
+            String iconFile = fileService.uploadFile(icon);
             contactCards.get(index).setIcon(iconFile);
         }
         contact.setContactCards(contactCards);

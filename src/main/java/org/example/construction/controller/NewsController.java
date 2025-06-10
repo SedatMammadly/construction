@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class NewsController {
 
     @PostMapping
     public ResponseEntity<News> create(@RequestPart(name = "request") NewsDto newsDto,
-                                       @RequestPart(required = false) List<MultipartFile> images) {
+                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         final var createdNews = newsService.save(newsDto, images);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(createdNews.getId()).toUri();
@@ -40,7 +41,7 @@ public class NewsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<News> update(@PathVariable int id, @RequestPart(name = "request") NewsUpdateDto newsUpdateDto,
-                                       @RequestPart(required = false) List<MultipartFile> images) {
+                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         final var updatedNews = newsService.update(id, newsUpdateDto, images);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(updatedNews.getId()).toUri();
