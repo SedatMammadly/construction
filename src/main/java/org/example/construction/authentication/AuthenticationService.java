@@ -53,6 +53,6 @@ public class AuthenticationService {
 
     public Boolean verify(VerificationRequest verificationRequest) {
         userRepository.findByUsername(verificationRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-        return verificationCodeService.codeIsValid(verificationRequest.getVerificationCode());
+        return verificationCodeService.codeIsValid(verificationRequest.getVerificationCode(),verificationRequest.getEmail());
     }
 }
