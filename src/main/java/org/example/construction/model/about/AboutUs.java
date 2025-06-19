@@ -1,12 +1,10 @@
-package org.example.construction.model;
+package org.example.construction.model.about;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 
 import lombok.experimental.FieldDefaults;
-import org.example.construction.pojo.ManageTeam;
-import org.example.construction.pojo.Missions;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -20,19 +18,26 @@ import java.util.List;
 public class AboutUs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
+
     @JdbcTypeCode(SqlTypes.JSON)
     List<Missions> missions;
-    @Column(columnDefinition = "TEXT")
-    String visions;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    Vision vision;
+
     @JdbcTypeCode(SqlTypes.JSON)
     List<Values> values;
-    @ElementCollection
-    List<String>history;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    History history;
+
     @JdbcTypeCode(SqlTypes.JSON)
     List<ManageTeam> manageTeams;
-    @Column(columnDefinition = "TEXT")
-    String managementStructure;
-    @ElementCollection
-    List<String> certificates = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    ManagementStructure managementStructure;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    List<Certificate> certificates;
 }

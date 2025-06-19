@@ -1,8 +1,9 @@
 package org.example.construction.mapper;
 
 import org.example.construction.dto.*;
-import org.example.construction.model.Contact;
-import org.example.construction.model.Values;
+import org.example.construction.model.about.ManageTeam;
+import org.example.construction.model.about.Missions;
+import org.example.construction.model.about.Values;
 import org.example.construction.pojo.*;
 import org.mapstruct.Mapper;
 
