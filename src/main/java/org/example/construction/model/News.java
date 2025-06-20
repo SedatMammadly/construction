@@ -17,6 +17,7 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String title;
+    @Column(columnDefinition = "TEXT")
     String paragraph;
     @ElementCollection
     List<String> images = new ArrayList<String>();
