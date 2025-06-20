@@ -1,12 +1,12 @@
 package org.example.construction.service;
 
-import org.example.construction.config.FileConfig;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +24,7 @@ public class FileService {
             Files.createDirectories(storageDirectory);
         }
     }
+    private final Path root = Paths.get("uploads");
 
      public String uploadFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
@@ -58,8 +59,11 @@ public class FileService {
         }
         return savedFileNames;
     }
-
-
+    public Resource getFile(String storedName) throws MalformedURLException {
+        Path filePath = root.resolve(storedName);
+        return new UrlResource(filePath.toUri());
+    }
+//salam
     public boolean removeFile(String fileName) {
         try {
             Path filePath = this.storageDirectory.resolve(fileName);

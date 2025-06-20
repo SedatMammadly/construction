@@ -1,15 +1,21 @@
-package org.example.construction.pojo;
+package org.example.construction.model.about;
 
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
+@Data
+@Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ManageTeam {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
     String image;
     String title;
+    @Column(columnDefinition = "TEXT")
     String paragraph;
 }

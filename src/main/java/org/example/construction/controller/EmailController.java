@@ -1,7 +1,6 @@
 package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.construction.config.FileConfig;
 import org.example.construction.service.EmailService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -26,7 +26,8 @@ public class HomeService {
     private final PojoMapper pojoMapper;
 
     public Home getHome() {
-        return homeRepository.findAll().getFirst();
+
+        return homeRepository.findFirstByOrderByIdAsc();
     }
 
     public Home createHome(HomeRequest homeRequest, MultipartFile aboutImage, List<MultipartFile> icons) throws IOException {
@@ -43,6 +44,7 @@ public class HomeService {
             String url = fileService.uploadFile(aboutImage);
             home.getAbout().setImage(url);
         }
+        homeRepository.deleteAll();
         return homeRepository.save(home);
     }
 

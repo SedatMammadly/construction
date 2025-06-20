@@ -1,8 +1,11 @@
 package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.construction.service.FileService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,22 +23,37 @@ import java.nio.file.Paths;
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
-    @Value("${file.dir}")
-    private String fileDir;
 
 
-    @GetMapping("/cv/{filename:.+}")
-    public ResponseEntity<UrlResource> downloadFile(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get(fileDir).resolve(filename).normalize();
-        UrlResource resource = new UrlResource(filePath.toUri());
-        if (!resource.exists()) {
-            return ResponseEntity.notFound().build();
+    private final FileService fileService;
+
+    @GetMapping("/view/{filename}")
+    public ResponseEntity<Resource> viewFile(@PathVariable String filename) throws IOException {
+        Resource file = fileService.getFile(filename);
+        String contentType = Files.probeContentType(file.getFile().toPath());
+        if (contentType == null) {
+            contentType = "application/octet-stream";
         }
-        String contentType = Files.probeContentType(filePath);
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
+    @GetMapping("/download/{filename}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException {
+        Resource file = fileService.getFile(filename);
+        String contentType = Files.probeContentType(file.getFile().toPath());
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
 }
+
+
