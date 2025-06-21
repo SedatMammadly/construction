@@ -19,21 +19,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WhyChooseUsController {
     private final HomeService homeService;
-private final WhyChooseUsRepository whyChooseUsRepository;
+    private final WhyChooseUsRepository whyChooseUsRepository;
+
     @GetMapping
-    public ResponseEntity<List<WhyChooseUs>>getAllWhyChooseUs(){
+    public ResponseEntity<List<WhyChooseUs>> getAllWhyChooseUs() {
         return ResponseEntity.status(200).body(whyChooseUsRepository.findAll());
     }
+
     @PostMapping
-    public ResponseEntity<WhyChooseUs> addWhyChooseUs(@RequestPart(required = false,name = "request") WhyChooseUsDto whyChooseUsDto,
-                                                         @RequestPart(required = false) MultipartFile icon) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createWhyChooseUs(whyChooseUsDto,icon));
+    public ResponseEntity<WhyChooseUs> addWhyChooseUs(@RequestPart(required = false, name = "request") WhyChooseUsDto whyChooseUsDto,
+                                                      @RequestPart(required = false) MultipartFile icon) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createWhyChooseUs(whyChooseUsDto, icon));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WhyChooseUs> updateWhyChooseUs(@PathVariable Long id, @RequestPart(required = false,name = "request") WhyChooseUsDto whyChooseUsDto,
+    public ResponseEntity<WhyChooseUs> updateWhyChooseUs(@PathVariable Long id, @RequestPart(required = false, name = "request") WhyChooseUsDto whyChooseUsDto,
                                                          @RequestPart(required = false) MultipartFile icon) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateWhyChooseUs(id,whyChooseUsDto,icon));
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateWhyChooseUs(id, whyChooseUsDto, icon));
     }
 
     @DeleteMapping("/{id}")

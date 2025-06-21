@@ -63,7 +63,6 @@ public class FileService {
         Path filePath = root.resolve(storedName);
         return new UrlResource(filePath.toUri());
     }
-//salam
     public boolean removeFile(String fileName) {
         try {
             Path filePath = this.storageDirectory.resolve(fileName);

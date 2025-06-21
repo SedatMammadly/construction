@@ -19,4 +19,5 @@ public class Home {
     List<Projects> projects = new ArrayList<>();
     List<WhyChooseUs> whyChooseUs;
     List<News> news;
+    List<Carousel>carousel;
 }

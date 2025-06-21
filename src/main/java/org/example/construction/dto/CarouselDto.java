@@ -8,8 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResetPasswordRequest {
-    String oldPassword;
-    String newPassword;
-    String confirmPassword;
+public class CarouselDto {
+    String header;
+    String text;
 }

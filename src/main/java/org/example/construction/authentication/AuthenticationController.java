@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.AuthRequest;
 import org.example.construction.dto.ForgetPasswordDto;
+import org.example.construction.dto.ResetPasswordRequest;
 import org.example.construction.dto.VerificationRequest;
 import org.example.construction.service.PasswordChangeService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthRequest authRequest, HttpSession session) {
-        return ResponseEntity.ok(authenticationService.authenticate(authRequest,session));
+        return ResponseEntity.ok(authenticationService.authenticate(authRequest, session));
     }
 
     @PostMapping("/logout")
@@ -36,8 +37,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgetPassword")
-    public ResponseEntity<String>forgetPassword(@RequestParam String email,@RequestBody ForgetPasswordDto dto) {
-        return ResponseEntity.ok(passwordChangeService.forgetPassword(email,dto));
+    public ResponseEntity<String> forgetPassword(@RequestParam String email, @RequestBody ForgetPasswordDto dto) {
+        return ResponseEntity.ok(passwordChangeService.forgetPassword(email, dto));
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        return ResponseEntity.ok(passwordChangeService.resetPassword(email, resetPasswordRequest));
     }
 
     @PostMapping("/verify")

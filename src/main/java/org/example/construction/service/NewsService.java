@@ -5,7 +5,7 @@ import org.example.construction.dto.NewsDto;
 import org.example.construction.dto.NewsUpdateDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.model.News;
- import org.example.construction.repository.NewsRepository;
+import org.example.construction.repository.NewsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

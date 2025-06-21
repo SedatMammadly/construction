@@ -16,18 +16,18 @@ public class AboutService {
     private final ValuesRepository valuesRepository;
     private final VisionRepository visionRepository;
 
-
-
     public About get() {
-        About about =new About();
-        about.setCertificates(certificateRepository.findAll());
-        about.setMissions(missionsRepository.findAll());
-        about.setValues(valuesRepository.findAll());
-        about.setManageTeams(manageTeamRepository.findAll());
-        about.setHistory(historyRepository.findFirstByOrderByIdAsc());
-        about.setVision(visionRepository.findFirstByOrderByIdAsc());
-        about.setManagementStructure(managementStructureRepository.findFirstByOrderByIdAsc());
+        About aboutUs=new About();
+        aboutUs.setCertificates(certificateRepository.findAll());
+        aboutUs.setMissions(missionsRepository.findAll());
+        aboutUs.setValues(valuesRepository.findAll());
+        aboutUs.setManageTeams(manageTeamRepository.findAll());
+        aboutUs.setHistory(historyRepository.findFirstByOrderByIdAsc());
+        aboutUs.setVision(visionRepository.findFirstByOrderByIdAsc());
+        aboutUs.setManagementStructure(managementStructureRepository.findFirstByOrderByIdAsc());
 
-        return about;
+        return aboutUs;
     }
+
+
 }

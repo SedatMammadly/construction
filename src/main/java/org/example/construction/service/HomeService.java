@@ -1,10 +1,13 @@
 package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.example.construction.dto.AboutDto;
+import org.example.construction.dto.CarouselDto;
 import org.example.construction.dto.WhyChooseUsDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.mapper.PojoMapper;
+import org.example.construction.model.Carousel;
 import org.example.construction.model.Home;
 import org.example.construction.model.About;
 import org.example.construction.model.WhyChooseUs;
@@ -18,21 +21,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HomeService {
-     private final NewsRepository newsRepository;
+    private final NewsRepository newsRepository;
     private final PageMapper pageMapper;
     private final FileService fileService;
     private final PojoMapper pojoMapper;
     private final ProjectsRepository projectsRepository;
     private final HomeAboutRepository homeAboutRepository;
     private final WhyChooseUsRepository whyChooseUsRepository;
+    private final CarouselRepository carouselRepository;
 
     public Home getHome() {
         Home home = new Home();
-        List<WhyChooseUs>whyChooseUsList = whyChooseUsRepository.findAll();
+        List<WhyChooseUs> whyChooseUsList = whyChooseUsRepository.findAll();
         home.setProjects(projectsRepository.findTop10ByOrderByCreatedAtDesc());
         home.setAbout(homeAboutRepository.findAll().getFirst());
         home.setNews(newsRepository.findTop10ByOrderByCreatedAtDesc());
         home.setWhyChooseUs(whyChooseUsList);
+        home.setCarousel(carouselRepository.findAll());
         return home;
     }
 
@@ -104,4 +109,41 @@ public class HomeService {
         }
         whyChooseUsRepository.deleteById(id);
     }
+
+    public List<Carousel> getCarousels() {
+        return carouselRepository.findAll();
+    }
+
+    @SneakyThrows
+    public Carousel updateCarousel(CarouselDto carouselDto, MultipartFile carouselImage, Long id) {
+        Carousel carousel = carouselRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        pojoMapper.updateCarousel(carousel, carouselDto);
+        if (carouselImage != null) {
+            fileService.removeFile(carousel.getImage());
+            String image = fileService.uploadFile(carouselImage);
+            carousel.setImage(image);
+        }
+        return carouselRepository.save(carousel);
+    }
+
+
+    @SneakyThrows
+    public Carousel createCarousel(CarouselDto dto, MultipartFile image) {
+        Carousel carousel = pojoMapper.carouselDtoToPojo(dto);
+        if (image != null) {
+            String imageUrl = fileService.uploadFile(image);
+            carousel.setImage(imageUrl);
+        }
+        return carouselRepository.save(carousel);
+    }
+
+    public void deleteCarousel(Long id) {
+        Carousel carousel = carouselRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        if(carousel.getImage() != null) {
+            fileService.removeFile(carousel.getImage());
+        }
+        carouselRepository.deleteById(id);
+    }
+
+
 }
