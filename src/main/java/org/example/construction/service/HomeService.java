@@ -18,8 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HomeService {
-    private final HomeRepository homeRepository;
-    private final NewsRepository newsRepository;
+     private final NewsRepository newsRepository;
     private final PageMapper pageMapper;
     private final FileService fileService;
     private final PojoMapper pojoMapper;

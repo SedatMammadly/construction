@@ -5,8 +5,7 @@ import org.example.construction.dto.NewsDto;
 import org.example.construction.dto.NewsUpdateDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.model.News;
-import org.example.construction.repository.HomeRepository;
-import org.example.construction.repository.NewsRepository;
+ import org.example.construction.repository.NewsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +19,6 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final PageMapper pageMapper;
     private final FileService fileService;
-    private final HomeRepository homeRepository;
 
     public List<News> getAll() {
         return newsRepository.findTop10ByOrderByCreatedAtDesc();
