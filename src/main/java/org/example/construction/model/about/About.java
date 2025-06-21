@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AboutUs {
+public class About {
     List<Missions> missions;
     Vision vision;
     List<Values> values;

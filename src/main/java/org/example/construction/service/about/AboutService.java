@@ -1,7 +1,7 @@
 package org.example.construction.service.about;
 
 import lombok.RequiredArgsConstructor;
-import org.example.construction.model.about.AboutUs;
+import org.example.construction.model.about.About;
 import org.example.construction.repository.about.*;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +17,17 @@ public class AboutService {
     private final VisionRepository visionRepository;
 
 
-    private final AboutUsRepository repository;
 
-    public AboutUs get() {
-        AboutUs aboutUs=new AboutUs();
-        aboutUs.setCertificates(certificateRepository.findAll());
-        aboutUs.setMissions(missionsRepository.findAll());
-        aboutUs.setValues(valuesRepository.findAll());
-        aboutUs.setManageTeams(manageTeamRepository.findAll());
-        aboutUs.setHistory(historyRepository.findFirstByOrderByIdAsc());
-        aboutUs.setVision(visionRepository.findFirstByOrderByIdAsc());
-        aboutUs.setManagementStructure(managementStructureRepository.findFirstByOrderByIdAsc());
+    public About get() {
+        About about =new About();
+        about.setCertificates(certificateRepository.findAll());
+        about.setMissions(missionsRepository.findAll());
+        about.setValues(valuesRepository.findAll());
+        about.setManageTeams(manageTeamRepository.findAll());
+        about.setHistory(historyRepository.findFirstByOrderByIdAsc());
+        about.setVision(visionRepository.findFirstByOrderByIdAsc());
+        about.setManagementStructure(managementStructureRepository.findFirstByOrderByIdAsc());
 
-        return aboutUs;
+        return about;
     }
 }

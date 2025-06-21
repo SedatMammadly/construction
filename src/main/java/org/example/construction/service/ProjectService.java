@@ -6,8 +6,7 @@ import org.example.construction.dto.ProjectUpdateDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.model.Home;
 import org.example.construction.model.Projects;
-import org.example.construction.repository.HomeRepository;
-import org.example.construction.repository.ProjectsRepository;
+ import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +20,6 @@ public class ProjectService {
     private final ProjectsRepository projectsRepository;
     private final PageMapper pageMapper;
     private final FileService fileService;
-    private final HomeRepository homeRepository;
 
 
     public List<Projects> getAllProjects() {
