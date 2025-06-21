@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.NewsDto;
 import org.example.construction.dto.NewsUpdateDto;
 import org.example.construction.mapper.PageMapper;
-import org.example.construction.model.Home;
 import org.example.construction.model.News;
-import org.example.construction.pojo.HomeNews;
 import org.example.construction.repository.HomeRepository;
 import org.example.construction.repository.NewsRepository;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
