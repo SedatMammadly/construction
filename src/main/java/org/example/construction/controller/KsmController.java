@@ -15,7 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/ksm")
 @RequiredArgsConstructor
-public class KsmController {
+public class
+KsmController {
     private final KsmService ksmService;
 
 

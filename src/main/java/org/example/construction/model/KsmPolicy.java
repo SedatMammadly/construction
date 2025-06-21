@@ -15,5 +15,6 @@ public class KsmPolicy {
     Integer id;
     String icon;
     String title;
+    @Column(columnDefinition = "TEXT")
     String paragraph;
 }
