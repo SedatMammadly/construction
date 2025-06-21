@@ -5,9 +5,12 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.example.construction.pojo.SubContent;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,4 +27,7 @@ public class Projects {
     String image;
     @JdbcTypeCode(SqlTypes.JSON)
     List<SubContent> subContents;
+    @CreationTimestamp
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    LocalDateTime createdAt;
 }

@@ -26,7 +26,7 @@ public class NewsService {
     private final HomeRepository homeRepository;
 
     public List<News> getAll() {
-        return newsRepository.findAll();
+        return newsRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
     public News getById(int id) {
@@ -43,8 +43,6 @@ public class NewsService {
             }
             news.setImages(imageList);
         }
-        Home home = homeRepository.findAll().getFirst();
-        home.getNews().add(news);
         return newsRepository.save(news);
     }
 
@@ -56,27 +54,23 @@ public class NewsService {
         for (String image : oldImages) {
             if (!newsUpdateDto.getImages().contains(image)) {
                 toRemove.add(image);
-                fileService.removeFile(image);
+                oldImages.remove(image);
             }
         }
-        fileService.deleteFiles(oldImages);
-
+        fileService.deleteFiles(toRemove);
+        for (MultipartFile image : images){
+            if (image!=null){
+                String imageName=fileService.uploadFile(image);
+                oldImages.add(imageName);
+            }
+        }
 
         news.setImages(oldImages);
-        Home home = homeRepository.findAll().getFirst();
-        List<News> newsList = home.getNews();
-        newsList.removeIf(item -> item.getId() == id);
-        newsList.add(news);
-        home.setNews(newsList);
-        homeRepository.save(home);
         return newsRepository.save(savedNews);
     }
 
     public void deleteById(int id) {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
-        Home home = homeRepository.findAll().getFirst();
-        List<News> newsList = home.getNews();
-        newsList.removeIf(item -> item.getId() == id);
         for (String image : news.getImages()) {
             fileService.removeFile(image);
         }

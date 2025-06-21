@@ -6,7 +6,6 @@ import org.example.construction.dto.ProjectUpdateDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.model.Home;
 import org.example.construction.model.Projects;
-import org.example.construction.pojo.HomeProjects;
 import org.example.construction.repository.HomeRepository;
 import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.util.SlugUtil;
@@ -26,7 +25,7 @@ public class ProjectService {
 
 
     public List<Projects> getAllProjects() {
-        return projectsRepository.findAll();
+        return projectsRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
     public Projects getProjectById(Integer id) {
@@ -38,42 +37,25 @@ public class ProjectService {
         String slug = SlugUtil.toSlug(projects.getName());
         projects.setSlug(slug);
         if (file != null) {
-            String image = fileService.uploadFile(file );
+            String image = fileService.uploadFile(file);
             projects.setImage(image);
         }
-        Home home = homeRepository.findAll().getFirst();
-        HomeProjects homeProjects = new HomeProjects();
-        homeProjects.setProjectSlug(slug);
-        homeProjects.setImage(projects.getImage());
-        home.getProjects().add(homeProjects);
-        homeRepository.save(home);
         return projectsRepository.save(projects);
     }
 
     public Projects updateProject(ProjectUpdateDto projectDto, MultipartFile file, Integer id) throws IOException {
         Projects projects = projectsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
-        String oldSlug = projects.getSlug();
+
         Projects updatedProject = pageMapper.updateProjectEntityFromDto(projects, projectDto);
-
         String slug = SlugUtil.toSlug(updatedProject.getName());
-
+        updatedProject.setSlug(slug);
         if (file != null) {
             fileService.removeFile(updatedProject.getImage());
             String image = fileService.uploadFile(file);
             updatedProject.setImage(image);
         }
-
-        Projects savedProject = projectsRepository.save(updatedProject);
-        Home home = homeRepository.findAll().getFirst();
-        home.getProjects().removeIf(hp -> hp.getProjectSlug().equals(oldSlug));
-        updatedProject.setSlug(slug);
-        HomeProjects homeProjects = new HomeProjects();
-        homeProjects.setProjectSlug(savedProject.getSlug());
-        homeProjects.setImage(savedProject.getImage());
-        home.getProjects().add(homeProjects);
-        homeRepository.save(home);
-        return savedProject;
+        return projectsRepository.save(updatedProject);
     }
 
 
@@ -82,9 +64,6 @@ public class ProjectService {
         if (projects.getImage() != null) {
             fileService.removeFile(projects.getImage());
         }
-        Home home = homeRepository.findAll().getFirst();
-        home.getProjects().removeIf(homeProjects -> homeProjects.getProjectSlug().equals(projects.getSlug()));
-        homeRepository.save(home);
         projectsRepository.deleteById(id);
     }
 

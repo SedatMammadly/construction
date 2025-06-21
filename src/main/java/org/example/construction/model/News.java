@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,5 +22,9 @@ public class News {
     String title;
     String paragraph;
     @ElementCollection
-    List<String> images = new ArrayList<String>();
+    List<String> images = new ArrayList<>();
+    @CreationTimestamp
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    LocalDateTime createdAt;
+
 }

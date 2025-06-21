@@ -15,6 +15,5 @@ public class Vision {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
     @Column(columnDefinition = "TEXT")
-
     String vision;
 }

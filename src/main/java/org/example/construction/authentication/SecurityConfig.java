@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/**").permitAll()
+                        authorizeRequests.requestMatchers("/**").permitAll().requestMatchers("/v3/api-docs/**").permitAll()
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")

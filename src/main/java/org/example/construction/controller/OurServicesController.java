@@ -31,13 +31,14 @@ public class OurServicesController {
     private final CardService cardService;
     private final HeadCategoryService headCategoryService;
     private final SubCategoryService subCategoryService;
-private final CardRepository cardRepository;
+    private final CardRepository cardRepository;
     private final SubCategoryRepository subCategoryRepository;
-    ////////////////////// CARD //////////////////////
+
+    /// /////////////////// CARD //////////////////////
 
     @PostMapping("/card/create")
-    public Card createCard(@RequestPart CardDto cardDto,MultipartFile mainImage,List<MultipartFile> images) throws IOException {
-        return cardService.createCard(cardDto,mainImage,images);
+    public Card createCard(@RequestPart CardDto cardDto, MultipartFile mainImage, List<MultipartFile> images) throws IOException {
+        return cardService.createCard(cardDto, mainImage, images);
     }
 
     @GetMapping("/card/{id}")
@@ -53,9 +54,10 @@ private final CardRepository cardRepository;
     }
 
     @PutMapping("/card/{id}")
-    public Card updateCard(@PathVariable Long id,@RequestPart CardDto cardDto,MultipartFile mainImage,List<MultipartFile> images) throws IOException {
-        return cardService.updateCard(id, cardDto,mainImage,images);
+    public Card updateCard(@PathVariable Long id, @RequestPart CardDto cardDto, MultipartFile mainImage, List<MultipartFile> images) throws IOException {
+        return cardService.updateCard(id, cardDto, mainImage, images);
     }
+
     @DeleteMapping("/card/{id}")
     public void deleteCard(@PathVariable Long id) {
         cardService.deleteCard(id);
@@ -71,7 +73,7 @@ private final CardRepository cardRepository;
         return cardService.getCardsBySubCategorySlug(subCategorySlug);
     }
 
-    ////////////////////// HEAD CATEGORY //////////////////////
+    /// /////////////////// HEAD CATEGORY //////////////////////
 
     @PostMapping("/head-category/create")
     public HeadCategory createHeadCategory(@RequestBody HeadCategoryDto headCategoryDto) {
@@ -107,7 +109,7 @@ private final CardRepository cardRepository;
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    ////////////////////// SUB CATEGORY //////////////////////
+    /// /////////////////// SUB CATEGORY //////////////////////
 
     @PostMapping("/sub-category/create")
     public SubCategory createSubCategory(@RequestBody SubCategoryDto subCategoryDto) {

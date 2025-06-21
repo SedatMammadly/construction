@@ -30,16 +30,16 @@ public class ContactController {
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
-    @PutMapping("/update/contactCard/{index}")
-    public ResponseEntity<Contact> updateContactCard(@PathVariable int index,@RequestPart(name = "request") ContactCardDto ContactCardDto,
+    @PutMapping("/update/contactCard/{id}")
+    public ResponseEntity<Contact> updateContactCard(@PathVariable int id,@RequestPart(name = "request") ContactCardDto ContactCardDto,
                                                      @RequestPart(required = false) MultipartFile icon) throws IOException {
-        Contact contact = contactService.updateContactCard(index, ContactCardDto, icon);
+        Contact contact = contactService.updateContactCard(id, ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
-    @DeleteMapping("/delete/contactCard/{index}")
-    public ResponseEntity<Void> deleteContactCard(@PathVariable int index){
-        contactService.deleteContactCard(index);
+    @DeleteMapping("/delete/contactCard/{id}")
+    public ResponseEntity<Void> deleteContactCard(@PathVariable int id){
+        contactService.deleteContactCard(id);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

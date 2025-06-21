@@ -31,17 +31,17 @@ public class KsmController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @PutMapping("/update/ksmCard/{index}")
-    public ResponseEntity<Ksm> updateKsmCard(@PathVariable int index, @RequestPart(name = "request") KsmCardDto ksmCardDto,
+    @PutMapping("/update/ksmCard/{id}")
+    public ResponseEntity<Ksm> updateKsmCard(@PathVariable int id, @RequestPart(name = "request") KsmCardDto ksmCardDto,
                                              @RequestPart(required = false) MultipartFile icon,
                                              @RequestPart(required = false) List<MultipartFile> images) throws IOException {
-        Ksm ksm = ksmService.updateKsmCard(index, ksmCardDto, icon, images);
+        Ksm ksm = ksmService.updateKsmCard(id, ksmCardDto, icon, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @DeleteMapping("/delete/ksmCard/{index}")
-    public ResponseEntity<Void> deleteKsmCard(@PathVariable int index) {
-        ksmService.deleteKsmCard(index);
+    @DeleteMapping("/delete/ksmCard/{id}")
+    public ResponseEntity<Void> deleteKsmCard(@PathVariable int id) {
+        ksmService.deleteKsmCard(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

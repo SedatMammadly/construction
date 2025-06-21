@@ -2,111 +2,107 @@ package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.AboutDto;
-import org.example.construction.dto.HomeRequest;
 import org.example.construction.dto.WhyChooseUsDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.mapper.PojoMapper;
 import org.example.construction.model.Home;
-import org.example.construction.pojo.About;
-import org.example.construction.pojo.WhyChooseUs;
-import org.example.construction.repository.HomeRepository;
+import org.example.construction.model.About;
+import org.example.construction.model.WhyChooseUs;
+import org.example.construction.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class HomeService {
     private final HomeRepository homeRepository;
+    private final NewsRepository newsRepository;
     private final PageMapper pageMapper;
     private final FileService fileService;
     private final PojoMapper pojoMapper;
+    private final ProjectsRepository projectsRepository;
+    private final HomeAboutRepository homeAboutRepository;
+    private final WhyChooseUsRepository whyChooseUsRepository;
 
     public Home getHome() {
-
-        return homeRepository.findFirstByOrderByIdAsc();
+        Home home = new Home();
+        List<WhyChooseUs>whyChooseUsList = whyChooseUsRepository.findAll();
+        home.setProjects(projectsRepository.findTop10ByOrderByCreatedAtDesc());
+        home.setAbout(homeAboutRepository.findAll().getFirst());
+        home.setNews(newsRepository.findTop10ByOrderByCreatedAtDesc());
+        home.setWhyChooseUs(whyChooseUsList);
+        return home;
     }
 
-    public Home createHome(HomeRequest homeRequest, MultipartFile aboutImage, List<MultipartFile> icons) throws IOException {
-        Home home = pageMapper.homeDtoToEntity(homeRequest);
-        home.setProjects(new ArrayList<>());
-        home.setNews(new ArrayList<>());
-        if (icons != null) {
-            for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i));
-                home.getWhyChooseUs().get(i).setIcon(url);
-            }
-        }
+    public About createAbout(AboutDto aboutDto, MultipartFile aboutImage) throws IOException {
+        About about = pojoMapper.aboutDtoToPojo(aboutDto);
         if (aboutImage != null) {
             String url = fileService.uploadFile(aboutImage);
-            home.getAbout().setImage(url);
+            about.setImage(url);
         }
-        homeRepository.deleteAll();
-        return homeRepository.save(home);
+        return homeAboutRepository.save(about);
     }
 
-    public Home updateAbout(AboutDto aboutDto, MultipartFile aboutImage) throws IOException {
-        Home home = homeRepository.findAll().getFirst();
+    public About updateAbout(AboutDto aboutDto, MultipartFile aboutImage, Long id) throws IOException {
+        About about = homeAboutRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         if (aboutDto != null) {
-            About about = pojoMapper.aboutDtoToPojo(aboutDto);
-            home.setAbout(about);
+            about = pojoMapper.aboutDtoToPojo(aboutDto);
         }
         if (aboutImage != null) {
-            String image = home.getAbout().getImage();
-            if ( image != null){
+            String image = about.getImage();
+            if (image != null) {
                 fileService.removeFile(image);
             }
             String url = fileService.uploadFile(aboutImage);
-            home.getAbout().setImage(url);
+            about.setImage(url);
         }
-        return homeRepository.save(home);
+        return homeAboutRepository.save(about);
     }
 
-    public Home updateWhyChooseUs(List<WhyChooseUsDto> whyChooseUsDtoList, List<MultipartFile> icons) throws IOException {
-        Home home = homeRepository.findAll().getFirst();
-        if (!whyChooseUsDtoList.isEmpty()) {
-            home.getWhyChooseUs().clear();
-            List<WhyChooseUs> whyChooseUs = pojoMapper.whyChooseUsDtoListToPojoList(whyChooseUsDtoList);
-            home.setWhyChooseUs(whyChooseUs);
+    public void deleteAbout(Long id) {
+        About about = homeAboutRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        String image = about.getImage();
+        if (image != null) {
+            fileService.removeFile(image);
         }
-        if (icons != null) {
-            for (int i = 0; i < icons.size(); i++) {
-                String url = fileService.uploadFile(icons.get(i));
-                home.getWhyChooseUs().get(i).setIcon(url);
-            }
-        }
-        return homeRepository.save(home);
+        homeAboutRepository.deleteById(id);
     }
 
-    public Home updateWhyChooseUs(int index, WhyChooseUsDto whyChooseUsDto, MultipartFile icon) throws IOException {
-        Home home = homeRepository.findAll().getFirst();
-        int realIndex = index - 1;
+    public WhyChooseUs createWhyChooseUs(WhyChooseUsDto whyChooseUsDto, MultipartFile icon) throws IOException {
+        WhyChooseUs whyChooseUs = pojoMapper.whyChooseUsDtoToPojo(whyChooseUsDto);
+        if (icon != null) {
+            String url = fileService.uploadFile(icon);
+            whyChooseUs.setIcon(url);
+        }
+        return whyChooseUsRepository.save(whyChooseUs);
+    }
+
+
+    public WhyChooseUs updateWhyChooseUs(Long id, WhyChooseUsDto whyChooseUsDto, MultipartFile icon) throws IOException {
+        WhyChooseUs whyChooseUs = whyChooseUsRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         if (whyChooseUsDto != null) {
-            home.getWhyChooseUs().get(realIndex).setParagraph(whyChooseUsDto.getParagraph());
-            home.getWhyChooseUs().get(realIndex).setTitle(whyChooseUsDto.getTitle());
+            pojoMapper.updateWhyChooseUs(whyChooseUs, whyChooseUsDto);
         }
         if (icon != null) {
-            String icon1 = home.getWhyChooseUs().get(realIndex).getIcon();
+            String icon1 = whyChooseUs.getIcon();
             if (icon1 != null) {
                 fileService.removeFile(icon1);
             }
             String url = fileService.uploadFile(icon);
-            home.getWhyChooseUs().get(realIndex).setIcon(url);
+            whyChooseUs.setIcon(url);
         }
-        return homeRepository.save(home);
+        return whyChooseUsRepository.save(whyChooseUs);
     }
 
-    public Home deleteWhyChooseUs(int index) {
-        int realIndex = index - 1;
-        Home home = homeRepository.findAll().getFirst();
-        String icon = home.getWhyChooseUs().get(realIndex).getIcon();
+    public void deleteWhyChooseUs(Long id) {
+        WhyChooseUs whyChooseUs = whyChooseUsRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        String icon = whyChooseUs.getIcon();
         if (icon != null) {
             fileService.removeFile(icon);
         }
-        home.getWhyChooseUs().remove(realIndex);
-        return homeRepository.save(home);
+        whyChooseUsRepository.deleteById(id);
     }
 }
