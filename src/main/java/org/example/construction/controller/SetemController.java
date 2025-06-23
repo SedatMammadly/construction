@@ -30,8 +30,8 @@ public class SetemController {
 
     @PostMapping
     public Setem createSetem(@RequestPart SetemDto dto,
-                             @RequestParam MultipartFile icon,
-                             @RequestParam(required = false) List<MultipartFile> images) throws IOException {
+                             @RequestPart MultipartFile icon,
+                             @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         return setemService.create(dto, icon, images);
     }
 

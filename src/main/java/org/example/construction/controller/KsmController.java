@@ -26,9 +26,10 @@ KsmController {
     }
 
     @PostMapping
-    public ResponseEntity<Ksm> addKsmCards(@RequestPart(name = "request") List<KsmCardDto> KsmCardDtos,
-                                           @RequestPart(required = false) List<MultipartFile> icons) throws IOException {
-        Ksm ksm = ksmService.addKsmCards(KsmCardDtos, icons);
+    public ResponseEntity<Ksm> addKsmCards(@RequestPart(name = "request") KsmCardDto ksmCardDto,
+                                           @RequestPart() MultipartFile icon,
+                                           @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+        Ksm ksm = ksmService.addKsmCards(ksmCardDto,images,icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 

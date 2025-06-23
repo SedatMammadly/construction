@@ -42,13 +42,7 @@ public class SetemService {
 
         setem.setIcon(fileService.uploadFile(icon));
         setem.setImages(fileService.uploadFiles(images));
-        if (images != null && !images.isEmpty()) {
-            setem.setImages(Collections.singletonList(images.stream()
-                    .map(MultipartFile::getOriginalFilename)
-                    .toList().toString()));
-        } else {
-            setem.setImages(Collections.singletonList("")); // və ya null
-        }
+
 
         return setemRepository.save(setem);
     }

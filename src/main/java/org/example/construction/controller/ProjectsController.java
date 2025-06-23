@@ -35,18 +35,18 @@ public class ProjectsController {
 
     @PostMapping
     public ResponseEntity<Projects> addProject(@RequestPart("request") ProjectRequest request,
-                                               @RequestPart(required = false) MultipartFile image
+                                               @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        Projects project = projectService.addProject(request, image);
+        Projects project = projectService.addProject(request, images);
         return ResponseEntity.ok(project);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Projects> updateProject(@PathVariable Integer id,
-                                                  @RequestPart("request") ProjectUpdateDto request,
-                                                  @RequestPart(required = false) MultipartFile image
+                                                  @RequestPart("request") ProjectRequest request,
+                                                  @RequestPart(required = false) List<MultipartFile> image
     ) throws IOException {
-        Projects project = projectService.updateProject(request, image, id);
+        Projects project = projectService.updateProject(id,request, image );
         return ResponseEntity.ok(project);
     }
 

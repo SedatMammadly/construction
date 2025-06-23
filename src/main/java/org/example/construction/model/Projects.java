@@ -10,7 +10,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,9 +26,12 @@ public class Projects {
     @Column(unique = true)
     String slug;
     String name;
-    String image;
-    @JdbcTypeCode(SqlTypes.JSON)
-    List<SubContent> subContents;
+    LocalDate constructDate;
+    String orderOwner;
+    @Column(columnDefinition = "TEXT")
+    String content;
+    List<String> images;
+
     @CreationTimestamp
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     LocalDateTime createdAt;

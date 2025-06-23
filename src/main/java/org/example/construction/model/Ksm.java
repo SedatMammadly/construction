@@ -18,7 +18,11 @@ public class Ksm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @JdbcTypeCode(SqlTypes.JSON)
-    List<KsmCard>ksmCards;
+    String icon;
+    String title;
+    String description;
+    @Column(columnDefinition = "TEXT")
+    String paragraph;
+    List<String> images;
 
 }

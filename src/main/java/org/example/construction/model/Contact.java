@@ -18,6 +18,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @JdbcTypeCode(SqlTypes.JSON)
-    List<ContactCard>contactCards;
+    String title;
+    String desciption;
+    String icon;
 }
