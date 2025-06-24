@@ -2,7 +2,6 @@ package org.example.construction.mapper;
 
 import org.example.construction.dto.*;
 import org.example.construction.model.*;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

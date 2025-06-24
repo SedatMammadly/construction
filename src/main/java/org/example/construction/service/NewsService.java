@@ -45,23 +45,24 @@ public class NewsService {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
         List<String> oldImages = news.getImages();
         List<String> toRemove = new ArrayList<>();
-        News savedNews = pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
         for (String image : oldImages) {
             if (!newsUpdateDto.getImages().contains(image)) {
                 toRemove.add(image);
-                oldImages.remove(image);
             }
         }
         fileService.deleteFiles(toRemove);
-        for (MultipartFile image : images){
-            if (image!=null){
-                String imageName=fileService.uploadFile(image);
-                oldImages.add(imageName);
+        pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
+        if (images != null) {
+            for (MultipartFile image : images) {
+                if (image != null) {
+                    String imageName = fileService.uploadFile(image);
+                    oldImages.add(imageName);
+                }
             }
+            news.setImages(oldImages);
         }
 
-        news.setImages(oldImages);
-        return newsRepository.save(savedNews);
+        return newsRepository.save(news);
     }
 
     public void deleteById(int id) {

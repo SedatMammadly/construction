@@ -1,15 +1,12 @@
 package org.example.construction.controller.home;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.AboutDto;
 import org.example.construction.model.About;
-import org.example.construction.model.Home;
 import org.example.construction.repository.HomeAboutRepository;
 import org.example.construction.service.HomeService;
 import org.example.construction.service.about.AboutService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +37,7 @@ public class AboutController {
     public ResponseEntity<About> updateAbout(@PathVariable Long id,
                                              @RequestPart(required = false, name = "request") AboutDto aboutDto,
                                              @RequestPart(required = false) MultipartFile aboutImage) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateAbout(aboutDto, aboutImage, id));
+        return ResponseEntity.status(HttpStatus.OK).body(homeService.updateAbout(aboutDto, aboutImage, id));
     }
 
     @DeleteMapping("/{id}")

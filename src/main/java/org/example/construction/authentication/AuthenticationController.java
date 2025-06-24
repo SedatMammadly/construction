@@ -21,8 +21,8 @@ public class AuthenticationController {
     private final PasswordChangeService passwordChangeService;
 
     @PostMapping("/register")
-    public void register(@RequestBody AuthRequest authRequest) {
-        authenticationService.register(authRequest);
+    public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) {
+       return ResponseEntity.ok(authenticationService.register(authRequest));
     }
 
     @PostMapping("/login")

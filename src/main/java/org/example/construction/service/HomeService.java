@@ -53,7 +53,7 @@ public class HomeService {
     public About updateAbout(AboutDto aboutDto, MultipartFile aboutImage, Long id) throws IOException {
         About about = homeAboutRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         if (aboutDto != null) {
-            about = pojoMapper.aboutDtoToPojo(aboutDto);
+            pojoMapper.aboutDtoToPojo(aboutDto);
         }
         if (aboutImage != null) {
             String image = about.getImage();

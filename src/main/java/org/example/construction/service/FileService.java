@@ -76,7 +76,7 @@ public class FileService {
     public List<Boolean> deleteFiles(List<String> fileNames) {
         List<Boolean> deletionResults = new ArrayList<>();
         for (String fileName : fileNames) {
-            deletionResults.add(removeFile(fileName));
+            removeFile(fileName);
         }
         return deletionResults;
     }
