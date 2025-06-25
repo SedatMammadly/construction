@@ -3,6 +3,7 @@ package org.example.construction.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.KsmCardDto;
 import org.example.construction.model.Ksm;
+import org.example.construction.repository.KsmRepository;
 import org.example.construction.service.KsmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,11 @@ import java.util.List;
 public class
 KsmController {
     private final KsmService ksmService;
-
+private final KsmRepository ksmRepository;
 
     @GetMapping
-    public ResponseEntity<Ksm> getKsmPage() {
-        return ResponseEntity.ok(ksmService.getKsmPage());
+    public ResponseEntity<List<Ksm>> getKsmPage() {
+        return ResponseEntity.ok(ksmRepository.findAll());
     }
 
     @PostMapping
