@@ -4,11 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.example.construction.pojo.ContactCard;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
-import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +14,6 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String title;
-    String desciption;
+    String description;
     String icon;
 }

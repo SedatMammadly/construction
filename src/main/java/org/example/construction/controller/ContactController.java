@@ -2,7 +2,9 @@ package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ContactCardDto;
+import org.example.construction.dto.ContactMessageDto;
 import org.example.construction.model.Contact;
+import org.example.construction.model.ContactMessage;
 import org.example.construction.service.ContactService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +43,15 @@ public class ContactController {
     public ResponseEntity<Void> deleteContactCard(@PathVariable int id){
         contactService.deleteContact(id);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/getAll/contactMessages")
+    public ResponseEntity<List<ContactMessage>> getAllContactMessages() {
+        return ResponseEntity.ok(contactService.getAllContactMessages());
+    }
+
+    @PostMapping("/apply")
+    public ResponseEntity<String>sendContactMessage(@RequestBody ContactMessageDto contactMessageDto){
+        return ResponseEntity.ok(contactService.sendContactMessage(contactMessageDto));
     }
 }

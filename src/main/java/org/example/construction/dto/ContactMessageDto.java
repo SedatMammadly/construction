@@ -14,5 +14,6 @@ public class ContactMessageDto {
     String email;
     String phone;
     String topic;
+    String address;
     String message;
 }
