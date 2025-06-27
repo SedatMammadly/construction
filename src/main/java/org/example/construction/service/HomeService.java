@@ -41,37 +41,23 @@ public class HomeService {
         return home;
     }
 
-    public About createAbout(AboutDto aboutDto, MultipartFile aboutImage) throws IOException {
-        About about = pojoMapper.aboutDtoToPojo(aboutDto);
-        if (aboutImage != null) {
-            String url = fileService.uploadFile(aboutImage);
-            about.setImage(url);
-        }
+    public About createAbout(AboutDto aboutDto) {
+        About about = new About();
+        about.setTitle(aboutDto.getTitle());
+        about.setDescription(aboutDto.getParagraph());
         return homeAboutRepository.save(about);
     }
 
-    public About updateAbout(AboutDto aboutDto, MultipartFile aboutImage, Long id) throws IOException {
+    public About updateAbout(AboutDto aboutDto, Long id) {
         About about = homeAboutRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-        if (aboutDto != null) {
-            about = pojoMapper.aboutDtoToPojo(aboutDto);
-        }
-        if (aboutImage != null) {
-            String image = about.getImage();
-            if (image != null) {
-                fileService.removeFile(image);
-            }
-            String url = fileService.uploadFile(aboutImage);
-            about.setImage(url);
-        }
+        about.setTitle(aboutDto.getTitle());
+        about.setDescription(aboutDto.getParagraph());
         return homeAboutRepository.save(about);
     }
 
     public void deleteAbout(Long id) {
         About about = homeAboutRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-        String image = about.getImage();
-        if (image != null) {
-            fileService.removeFile(image);
-        }
+
         homeAboutRepository.deleteById(id);
     }
 
@@ -139,7 +125,7 @@ public class HomeService {
 
     public void deleteCarousel(Long id) {
         Carousel carousel = carouselRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-        if(carousel.getImage() != null) {
+        if (carousel.getImage() != null) {
             fileService.removeFile(carousel.getImage());
         }
         carouselRepository.deleteById(id);

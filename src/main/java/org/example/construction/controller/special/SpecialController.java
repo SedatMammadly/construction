@@ -4,6 +4,7 @@ package org.example.construction.controller.special;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.SpecialDto;
 import org.example.construction.model.Special;
+import org.example.construction.repository.SpecialRepository;
 import org.example.construction.service.SpecialService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,12 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/specials")
+@RequestMapping("/api/v1/specials")
 @RequiredArgsConstructor
 public class SpecialController {
 
     private final SpecialService specialService;
+    private final SpecialRepository specialRepository;
 
     @PostMapping
     public ResponseEntity<Special> createSpecial(
@@ -31,6 +33,11 @@ public class SpecialController {
     @GetMapping
     public ResponseEntity<List<Special>> getAll() {
         return ResponseEntity.ok(specialService.getAllSpecials());
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<Special> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.status(200).body(specialRepository.findBySlug(slug));
     }
 
     @GetMapping("/{id}")

@@ -3,6 +3,7 @@ package org.example.construction.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.KsmCardDto;
 import org.example.construction.model.Ksm;
+import org.example.construction.model.News;
 import org.example.construction.repository.KsmRepository;
 import org.example.construction.service.KsmService;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,11 @@ KsmController {
     @GetMapping
     public ResponseEntity<List<Ksm>> getAllKsms() {
         return ResponseEntity.ok(ksmRepository.findAll());
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<Ksm> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.status(200).body(ksmRepository.findBySlug(slug));
     }
 
     @GetMapping("/{id}")

@@ -17,6 +17,7 @@ import java.util.*;
 @Service
 public class FileService {
     private final Path storageDirectory;
+    private final Path root = Paths.get("uploads");
 
     public FileService() throws IOException {
         this.storageDirectory = Paths.get("uploads");
@@ -24,9 +25,8 @@ public class FileService {
             Files.createDirectories(storageDirectory);
         }
     }
-    private final Path root = Paths.get("uploads");
 
-     public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IOException("Boş fayl  yüklənə bilməz.");
         }
@@ -59,10 +59,12 @@ public class FileService {
         }
         return savedFileNames;
     }
+
     public Resource getFile(String storedName) throws MalformedURLException {
         Path filePath = root.resolve(storedName);
         return new UrlResource(filePath.toUri());
     }
+
     public boolean removeFile(String fileName) {
         try {
             Path filePath = this.storageDirectory.resolve(fileName);
@@ -80,7 +82,6 @@ public class FileService {
         }
         return deletionResults;
     }
-
 
 
 }

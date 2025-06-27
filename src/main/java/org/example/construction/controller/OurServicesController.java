@@ -41,6 +41,11 @@ public class OurServicesController {
         return cardService.createCard(cardDto, mainImage, images);
     }
 
+    @GetMapping("/card/{slug}")
+    public ResponseEntity<Card> getCardBySlug(@PathVariable String slug) {
+        return ResponseEntity.status(200).body(cardRepository.findBySlug(slug));
+    }
+
     @GetMapping("/card/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable Long id) {
         return cardService.getCardById(id)

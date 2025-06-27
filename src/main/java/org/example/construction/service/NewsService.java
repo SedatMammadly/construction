@@ -6,6 +6,7 @@ import org.example.construction.dto.NewsUpdateDto;
 import org.example.construction.mapper.PageMapper;
 import org.example.construction.model.News;
 import org.example.construction.repository.NewsRepository;
+import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,7 @@ public class NewsService {
 
     public News save(NewsDto newsDto, List<MultipartFile> images) throws IOException {
         News news = pageMapper.newsDtoToEntity(newsDto);
+        news.setSlug(SlugUtil.toSlug(news.getTitle()));
         List<String> imageList = new ArrayList<>();
         if (images != null) {
             for (MultipartFile file : images) {
@@ -43,6 +45,7 @@ public class NewsService {
 
     public News update(int id, NewsUpdateDto newsUpdateDto, List<MultipartFile> images) throws IOException {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
+        news.setSlug(SlugUtil.toSlug(news.getTitle()));
         List<String> oldImages = news.getImages();
         List<String> toRemove = new ArrayList<>();
         News savedNews = pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
@@ -53,9 +56,9 @@ public class NewsService {
             }
         }
         fileService.deleteFiles(toRemove);
-        for (MultipartFile image : images){
-            if (image!=null){
-                String imageName=fileService.uploadFile(image);
+        for (MultipartFile image : images) {
+            if (image != null) {
+                String imageName = fileService.uploadFile(image);
                 oldImages.add(imageName);
             }
         }

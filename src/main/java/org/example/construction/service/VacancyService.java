@@ -8,6 +8,7 @@ import org.example.construction.model.Applicant;
 import org.example.construction.model.Vacancy;
 import org.example.construction.repository.ApplicantRepository;
 import org.example.construction.repository.VacancyRepository;
+import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +35,9 @@ public class VacancyService {
 
     public Vacancy save(VacancyDto vacancyDto, List<MultipartFile> images) throws IOException {
         Vacancy vacancy = pageMapper.vacancyEntityToDto(vacancyDto);
+        vacancy.setSlug(SlugUtil.toSlug(vacancy.getTitle()));
         List<String> imageList = new ArrayList<>();
-        if (images != null){
+        if (images != null) {
             for (MultipartFile image : images) {
                 String file = fileService.uploadFile(image);
                 imageList.add(file);
@@ -45,11 +47,13 @@ public class VacancyService {
         return vacancyRepository.save(vacancy);
     }
 
-    public Vacancy update(int id,VacancyDto vacancyDto, List<MultipartFile> images) {
+    public Vacancy update(int id, VacancyDto vacancyDto, List<MultipartFile> images) {
         Vacancy vacancy = vacancyRepository.findById(id).orElseThrow(() -> new RuntimeException("Vacancy not found"));
-        Vacancy savedVacancy = pageMapper.updateVacancyEntityFromDto(vacancy,vacancyDto);
+        Vacancy savedVacancy = pageMapper.updateVacancyEntityFromDto(vacancy, vacancyDto);
+        vacancy.setSlug(SlugUtil.toSlug(vacancy.getTitle()));
+
         List<String> imageList = savedVacancy.getImages();
-     fileService.deleteFiles(imageList);
+        fileService.deleteFiles(imageList);
 
         return vacancyRepository.save(savedVacancy);
     }
@@ -64,7 +68,7 @@ public class VacancyService {
 
     public String apply(ApplicantDto applicantDto, MultipartFile file) throws IOException {
         Applicant applicant = pageMapper.applicantDtoToEntity(applicantDto);
-        if (file != null){
+        if (file != null) {
             String fileName = fileService.uploadFile(file);
             applicant.setCvFile(fileName);
         }

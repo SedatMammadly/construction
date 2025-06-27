@@ -19,8 +19,6 @@ public class About {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String paragraph;
-    String image;
-    @JdbcTypeCode(SqlTypes.JSON)
-    List<AboutCard> aboutCards;
+    String title;
+    String description; 
 }

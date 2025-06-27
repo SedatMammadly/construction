@@ -51,7 +51,7 @@ public class SetemService {
         setemRepository.deleteById(id);
     }
 
-    public Setem update(Long id, SetemDto dto, MultipartFile icon,List<MultipartFile> images) throws IOException {
+    public Setem update(Long id, SetemDto dto, MultipartFile icon, List<MultipartFile> images) throws IOException {
         Setem setem = setemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Setem not found"));
 

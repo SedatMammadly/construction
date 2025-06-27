@@ -20,6 +20,7 @@ public class Ksm {
     Integer id;
     String icon;
     String title;
+    String slug;
     String description;
     @Column(columnDefinition = "TEXT")
     String paragraph;

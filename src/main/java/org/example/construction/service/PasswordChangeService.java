@@ -15,14 +15,15 @@ public class PasswordChangeService {
     private final PasswordEncoder passwordEncoder;
 
     public String forgetPassword(String email, ForgetPasswordDto dto) {
-        User user = userRepository.findByUsername(email).orElseThrow(()->new RuntimeException("User not found"));
+        User user = userRepository.findByUsername(email).orElseThrow(() -> new RuntimeException("User not found"));
         passwordCheck(user, dto.getNewPassword(), dto.getConfirmPassword());
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
         return "Password changed successfully";
     }
-    public String resetPassword(String email,ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByUsername(email).orElseThrow(()->new RuntimeException("User not found"));
+
+    public String resetPassword(String email, ResetPasswordRequest resetPasswordRequest) {
+        User user = userRepository.findByUsername(email).orElseThrow(() -> new RuntimeException("User not found"));
         if (!passwordEncoder.matches(user.getPassword(), resetPasswordRequest.getOldPassword())) {
             throw new RuntimeException("Password does not match old password ");
         }

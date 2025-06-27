@@ -13,4 +13,6 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     List<Card> findBySubCategorySlug(String subCategorySlug);
 
     List<Card> findByHeadCategorySlug(String headCategorySlug);
+
+    Card findBySlug(String slug);
 }

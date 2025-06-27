@@ -24,15 +24,15 @@ public class CarouselController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Carousel>updateCarousel(@PathVariable Long id, @RequestPart(name = "request") CarouselDto carouselDto,
-                                                  @RequestPart(required = false) MultipartFile image)throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateCarousel(carouselDto,image,id));
+    public ResponseEntity<Carousel> updateCarousel(@PathVariable Long id, @RequestPart(name = "request") CarouselDto carouselDto,
+                                                   @RequestPart(required = false) MultipartFile image) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateCarousel(carouselDto, image, id));
     }
 
 
     @PostMapping
     public ResponseEntity<Carousel> create(@RequestPart(name = "request") CarouselDto dto, @RequestPart MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createCarousel(dto,image));
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createCarousel(dto, image));
     }
 
     @DeleteMapping("/{id}")

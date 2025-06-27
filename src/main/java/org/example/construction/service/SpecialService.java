@@ -41,7 +41,7 @@ public class SpecialService {
     public Special updateSpecial(Long id, SpecialDto specialDto, List<MultipartFile> newImages) throws IOException {
         Special special = specialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Special not found"));
-fileService.deleteFiles(special.getImages());
+        fileService.deleteFiles(special.getImages());
         special.setName(specialDto.getName());
         special.setContent(specialDto.getContent());
         special.setSlug(SlugUtil.toSlug(specialDto.getName()));

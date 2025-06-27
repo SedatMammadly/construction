@@ -10,4 +10,6 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, Integer> {
 
     List<News> findTop10ByOrderByCreatedAtDesc();
+
+    News findBySlug(String slug);
 }

@@ -2,7 +2,7 @@ package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ContactCardDto;
- import org.example.construction.model.Contact;
+import org.example.construction.model.Contact;
 import org.example.construction.repository.ContactRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +21,7 @@ public class ContactService {
         return contactRepository.findAll().getFirst();
     }
 
-        public Contact addContact(ContactCardDto contactDto, MultipartFile icon) throws IOException {
+    public Contact addContact(ContactCardDto contactDto, MultipartFile icon) throws IOException {
         Contact contact = new Contact();
         contact.setTitle(contactDto.getTitle());
         contact.setDesciption(contactDto.getDescription());

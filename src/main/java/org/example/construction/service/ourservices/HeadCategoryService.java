@@ -22,7 +22,7 @@ public class HeadCategoryService {
 
     // Create
     public HeadCategory createHeadCategory(HeadCategoryDto headCategoryDto) {
-        HeadCategory headCategory=new HeadCategory();
+        HeadCategory headCategory = new HeadCategory();
         headCategory.setName(headCategoryDto.getName());
         headCategory.setDescription(headCategoryDto.getDescription());
         headCategory.setSlug(SlugUtil.toSlug(headCategoryDto.getName()));

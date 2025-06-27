@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.NewsDto;
 import org.example.construction.dto.NewsUpdateDto;
 import org.example.construction.model.News;
+import org.example.construction.model.Special;
+import org.example.construction.repository.NewsRepository;
 import org.example.construction.service.NewsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NewsController {
     private final NewsService newsService;
+    private final NewsRepository newsRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<News> getById(@PathVariable int id) {
@@ -27,6 +30,11 @@ public class NewsController {
     @GetMapping
     public ResponseEntity<List<News>> getAll() {
         return ResponseEntity.ok(newsService.getAll());
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<News> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.status(200).body(newsRepository.findBySlug(slug));
     }
 
     @PostMapping

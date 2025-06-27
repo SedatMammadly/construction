@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KsmRepository extends JpaRepository<Ksm, Integer> {
+    Ksm findBySlug(String slug);
 }

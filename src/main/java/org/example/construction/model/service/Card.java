@@ -22,6 +22,7 @@ public class Card {
     String subCategory;
     String headCategorySlug;
     String subCategorySlug;
+    String slug;
     String header;
     String description;
     @JdbcTypeCode(SqlTypes.JSON)

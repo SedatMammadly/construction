@@ -6,6 +6,7 @@ import org.example.construction.mapper.PojoMapper;
 import org.example.construction.model.Ksm;
 import org.example.construction.pojo.KsmCard;
 import org.example.construction.repository.KsmRepository;
+import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,37 +22,37 @@ public class KsmService {
     private final FileService fileService;
     private final PojoMapper pojoMapper;
 
-    public Ksm getKsmPage() {
-        return ksmRepository.findAll().getFirst();
-    }
 
-    public Ksm addKsmCards(KsmCardDto ksmCardDto, List<MultipartFile> images,MultipartFile icon) throws IOException {
+    public Ksm addKsmCards(KsmCardDto ksmCardDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
         Ksm ksm = new Ksm();
-         ksm.setTitle(ksmCardDto.getTitle());
-         ksm.setDescription(ksmCardDto.getDescription());
-         ksm.setParagraph(ksmCardDto.getParagraph());
-         ksm.setIcon(fileService.uploadFile(icon));
-         ksm.setImages(fileService.uploadFiles(images));
-         return ksmRepository.save(ksm);
+        ksm.setTitle(ksmCardDto.getTitle());
+        ksm.setSlug(SlugUtil.toSlug(ksmCardDto.getTitle()));
+        ksm.setDescription(ksmCardDto.getDescription());
+        ksm.setParagraph(ksmCardDto.getParagraph());
+        ksm.setIcon(fileService.uploadFile(icon));
+        ksm.setImages(fileService.uploadFiles(images));
+        return ksmRepository.save(ksm);
     }
 
-    public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon,List<MultipartFile> images) throws IOException {
-    Ksm ksm = ksmRepository.findById(index).get();
-    ksm.setTitle(ksmCardDto.getTitle());
-    ksm.setDescription(ksmCardDto.getDescription());
-    ksm.setParagraph(ksmCardDto.getParagraph());
-    fileService.removeFile(ksm.getIcon());
-    fileService.deleteFiles(ksm.getImages());
-    ksm.setIcon(fileService.uploadFile(icon));
-    ksm.setImages(fileService.uploadFiles(images));
+    public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon, List<MultipartFile> images) throws IOException {
+        Ksm ksm = ksmRepository.findById(index).get();
+        ksm.setTitle(ksmCardDto.getTitle());
+        ksm.setDescription(ksmCardDto.getDescription());
+        ksm.setParagraph(ksmCardDto.getParagraph());
+        ksm.setSlug(SlugUtil.toSlug(ksmCardDto.getTitle()));
 
-        return  ksmRepository.save(ksm);
+        fileService.removeFile(ksm.getIcon());
+        fileService.deleteFiles(ksm.getImages());
+        ksm.setIcon(fileService.uploadFile(icon));
+        ksm.setImages(fileService.uploadFiles(images));
+
+        return ksmRepository.save(ksm);
     }
 
     public void deleteKsmCard(int id) {
-        Optional<Ksm> ksmCards=ksmRepository.findById(id);
+        Optional<Ksm> ksmCards = ksmRepository.findById(id);
 
-        List<String>imagesList = ksmCards.get().getImages();
+        List<String> imagesList = ksmCards.get().getImages();
         if (imagesList != null) {
             for (int i = 0; i < imagesList.size(); i++) {
                 String imageFile = imagesList.get(i);

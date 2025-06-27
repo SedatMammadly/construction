@@ -20,10 +20,9 @@ public class SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
 
 
-
     // Create
     public SubCategory createSubCategory(SubCategoryDto subCategoryDto) {
-        SubCategory subCategory=new SubCategory();
+        SubCategory subCategory = new SubCategory();
         subCategory.setName(subCategoryDto.getName());
         subCategory.setHeadCategory(subCategoryDto.getHeadCategory());
         subCategory.setSlug(SlugUtil.toSlug(subCategoryDto.getName()));
@@ -40,8 +39,6 @@ public class SubCategoryService {
     public List<SubCategory> getAllSubCategories() {
         return subCategoryRepository.findAll();
     }
-
-
 
 
     // Delete

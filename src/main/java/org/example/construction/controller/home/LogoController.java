@@ -22,10 +22,11 @@ public class LogoController {
     public Logo getLogo() {
         return logoRepository.findFirstByOrderByIdAsc();
     }
+
     @PostMapping
     public Logo setLogo(@RequestPart LogoDto logoDto, @RequestPart(required = false) MultipartFile icon) throws IOException {
         logoRepository.deleteAll();
-        Logo logo=new Logo();
+        Logo logo = new Logo();
         logo.setTitle(logoDto.getName());
         logo.setImage(fileService.uploadFile(icon));
         return logoRepository.save(logo);

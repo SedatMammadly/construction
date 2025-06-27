@@ -46,7 +46,7 @@ public class ProjectsController {
                                                   @RequestPart("request") ProjectRequest request,
                                                   @RequestPart(required = false) List<MultipartFile> image
     ) throws IOException {
-        Projects project = projectService.updateProject(id,request, image );
+        Projects project = projectService.updateProject(id, request, image);
         return ResponseEntity.ok(project);
     }
 

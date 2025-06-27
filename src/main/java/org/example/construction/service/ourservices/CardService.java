@@ -32,6 +32,7 @@ public class CardService {
         content.setMainImage(fileService.uploadFile(mainImage));
         content.setImages(fileService.uploadFiles(images));
         card.setContent(content);
+        card.setSlug(SlugUtil.toSlug(cardDto.getHeader()));
         card.setHeader(cardDto.getHeader());
         card.setSubCategory(cardDto.getSubCategory());
         card.setHeadCategory(cardDto.getHeadCategory());
@@ -58,6 +59,7 @@ public class CardService {
             existCard.get().setHeader(updatedCard.getHeader());
             existCard.get().setDescription(updatedCard.getDescription());
             existCard.get().setSubCategory(updatedCard.getSubCategory());
+            existCard.get().setSlug(SlugUtil.toSlug(updatedCard.getSubCategory()));
             existCard.get().setHeadCategory(updatedCard.getHeadCategory());
             Content content = new Content();
             content.setContentWrite(updatedCard.getContent().getContentWrite());

@@ -16,19 +16,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ForeignMissionsController {
     private final ForeignRepository foreignRepository;
-private final ForeignMissionService foreignMissionService;
+    private final ForeignMissionService foreignMissionService;
+
     @GetMapping("/all")
     public List<ForeignMission> getAllForeignMissions() {
         return foreignRepository.findAll();
     }
+
     @GetMapping("/{id}")
     public ForeignMission getForeignMission(@PathVariable Long id) {
         return foreignRepository.findById(id).get();
     }
+
     @PostMapping("/add")
     public ForeignMission addForeignMission(@RequestPart ForeignMissionDto foreignMissionDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
-return foreignMissionService.add(foreignMissionDto,images,icon);
+        return foreignMissionService.add(foreignMissionDto, images, icon);
     }
+
     // 🔎 GET by Slug
     @GetMapping("/slug/{slug}")
     public ForeignMission getBySlug(@PathVariable String slug) {

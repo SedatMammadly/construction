@@ -30,7 +30,7 @@ public class EmailService {
         message.setText(verificationCode);
         message.setSubject("Your Verification Code:");
         mailSender.send(message);
-        redisTokenService.saveToken(email,verificationCode,expirationDate);
+        redisTokenService.saveToken(email, verificationCode, expirationDate);
     }
 
 

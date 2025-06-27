@@ -18,6 +18,7 @@ public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+    String slug;
     String title;
     @Column(columnDefinition = "TEXT")
     String content;

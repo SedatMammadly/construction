@@ -25,21 +25,21 @@ public class ContactController {
 
     @PostMapping
     public ResponseEntity<Contact> addContactCards(@RequestPart(name = "request") ContactCardDto ContactCardDto,
-                                   @RequestPart(required = true) MultipartFile icon) throws IOException {
+                                                   @RequestPart(required = true) MultipartFile icon) throws IOException {
         Contact contact = contactService.addContact(ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
     @PutMapping("/update/contactCard/{id}")
-    public ResponseEntity<Contact> updateContactCard(@PathVariable int id,@RequestPart(name = "request") ContactCardDto ContactCardDto,
+    public ResponseEntity<Contact> updateContactCard(@PathVariable int id, @RequestPart(name = "request") ContactCardDto ContactCardDto,
                                                      @RequestPart(required = false) MultipartFile icon) throws IOException {
         Contact contact = contactService.updateContact(id, ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
     @DeleteMapping("/delete/contactCard/{id}")
-    public ResponseEntity<Void> deleteContactCard(@PathVariable int id){
+    public ResponseEntity<Void> deleteContactCard(@PathVariable int id) {
         contactService.deleteContact(id);
-      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
