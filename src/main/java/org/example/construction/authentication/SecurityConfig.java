@@ -27,7 +27,6 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID", "X-XSRF-TOKEN"))
                 .sessionManagement(session -> session
-                        .invalidSessionUrl("/login?session=invalid")
                         .maximumSessions(3)
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

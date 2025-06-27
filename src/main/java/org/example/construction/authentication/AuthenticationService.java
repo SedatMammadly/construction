@@ -26,12 +26,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RedisVerificationCodeService verificationCodeService;
 
-    public void register(AuthRequest authRequest) {
+    public String register(AuthRequest authRequest) {
         User user = new User();
         user.setUsername(authRequest.getUsername());
         user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
         user.setRole(Role.ADMIN);
         userRepository.save(user);
+        return "Registered successfully";
     }
 
     public String authenticate(AuthRequest authRequest, HttpSession session) {

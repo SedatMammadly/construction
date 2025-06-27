@@ -30,6 +30,7 @@ public class Projects {
     String orderOwner;
     @Column(columnDefinition = "TEXT")
     String content;
+    @ElementCollection
     List<String> images;
 
     @CreationTimestamp

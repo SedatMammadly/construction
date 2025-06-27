@@ -19,8 +19,8 @@ public class HomeController {
     private final HomeService homeService;
 
     @GetMapping
-    public ResponseEntity<Home> getHome() {
-        return ResponseEntity.ok(homeService.getHome());
+    public Home getHome() {
+        return homeService.getHome();
     }
 
 
