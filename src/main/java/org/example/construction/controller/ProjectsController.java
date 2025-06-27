@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ProjectRequest;
 import org.example.construction.dto.ProjectUpdateDto;
 import org.example.construction.model.Projects;
+import org.example.construction.model.Vacancy;
+import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.service.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectsController {
     private final ProjectService projectService;
+    private final ProjectsRepository projectsRepository;
 
     @GetMapping("{id}")
     public ResponseEntity<Projects> getProjectsById(@PathVariable Integer id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
-
+    @GetMapping("/{slug}")
+    public ResponseEntity<Projects> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.status(200).body(projectsRepository.findBySlug(slug));
+    }
     @GetMapping
     public ResponseEntity<Projects> getProjectBySlug(@RequestParam String slug) {
         return ResponseEntity.ok(projectService.getProjectBySlug(slug));

@@ -54,4 +54,5 @@ public class ContactController {
     public ResponseEntity<String>sendContactMessage(@RequestBody ContactMessageDto contactMessageDto){
         return ResponseEntity.ok(contactService.sendContactMessage(contactMessageDto));
     }
+
 }
