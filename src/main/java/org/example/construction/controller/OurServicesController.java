@@ -41,7 +41,7 @@ public class OurServicesController {
         return cardService.createCard(cardDto, mainImage, images);
     }
 
-    @GetMapping("/card/{slug}")
+    @GetMapping("/card/slug/{slug}")
     public ResponseEntity<Card> getCardBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(cardRepository.findBySlug(slug));
     }
@@ -165,7 +165,7 @@ public class OurServicesController {
         subCategoryService.deleteSubCategory(id);
     }
 
-    @GetMapping("/sub-category/head/{headSlug}")
+    @GetMapping("/sub-category/head/slug/{headSlug}")
     public List<SubCategory> getSubCategoriesByHeadSlug(@PathVariable String headSlug) {
         return subCategoryService.getSubCategoriesByHeadSlug(headSlug);
     }

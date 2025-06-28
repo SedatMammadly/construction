@@ -30,7 +30,7 @@ private final VacancyRepository vacancyRepository;
     public ResponseEntity<Vacancy> getById(@PathVariable int id) {
         return ResponseEntity.ok(vacancyService.findById(id));
     }
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<Vacancy> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(vacancyRepository.findBySlug(slug));
     }

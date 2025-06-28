@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
  import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/v1/home/about")
 @RestController
@@ -27,6 +28,10 @@ public class AboutController {
     public ResponseEntity<About> addAbout(@RequestPart(required = false, name = "request") AboutDto aboutDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createAbout(aboutDto));
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<About>> getByAboutId(@PathVariable Long id) {
+        return ResponseEntity.ok(homeAboutRepository.findById(id));
     }
 
     @PutMapping("/{id}")

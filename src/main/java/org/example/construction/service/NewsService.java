@@ -44,28 +44,29 @@ public class NewsService {
     }
 
     public News update(int id, NewsUpdateDto newsUpdateDto, List<MultipartFile> images) throws IOException {
-        News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
-        news.setSlug(SlugUtil.toSlug(news.getTitle()));
-        List<String> oldImages = news.getImages();
-        List<String> toRemove = new ArrayList<>();
-        News savedNews = pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
-        for (String image : oldImages) {
-            if (!newsUpdateDto.getImages().contains(image)) {
-                toRemove.add(image);
-                oldImages.remove(image);
+        News existingNews = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found"));
+
+        existingNews.setTitle(newsUpdateDto.getTitle());
+        existingNews.setParagraph(newsUpdateDto.getParagraph());
+        existingNews.setSlug(SlugUtil.toSlug(newsUpdateDto.getTitle()));
+
+        if (images != null && !images.isEmpty()) {
+            // Eğer eski görseller null değilse, sil ve temizle
+            if (existingNews.getImages() != null) {
+                fileService.deleteFiles(existingNews.getImages());
+                existingNews.getImages().clear(); // koleksiyonu temizle
+            } else {
+                existingNews.setImages(new ArrayList<>()); // null ise initialize et
             }
-        }
-        fileService.deleteFiles(toRemove);
-        for (MultipartFile image : images) {
-            if (image != null) {
-                String imageName = fileService.uploadFile(image);
-                oldImages.add(imageName);
-            }
+
+            // Yeni görselleri yükle ve ekle
+            existingNews.getImages().addAll(fileService.uploadFiles(images));
         }
 
-        news.setImages(oldImages);
-        return newsRepository.save(savedNews);
+        return newsRepository.save(existingNews);
     }
+
 
     public void deleteById(int id) {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));

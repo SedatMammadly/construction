@@ -25,7 +25,7 @@ public class ProjectsController {
     public ResponseEntity<Projects> getProjectsById(@PathVariable Integer id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<Projects> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(projectsRepository.findBySlug(slug));
     }
@@ -50,9 +50,9 @@ public class ProjectsController {
     @PutMapping("/{id}")
     public ResponseEntity<Projects> updateProject(@PathVariable Integer id,
                                                   @RequestPart("request") ProjectRequest request,
-                                                  @RequestPart(required = false) List<MultipartFile> image
+                                                  @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        Projects project = projectService.updateProject(id, request, image);
+        Projects project = projectService.updateProject(id, request, images);
         return ResponseEntity.ok(project);
     }
 

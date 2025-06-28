@@ -10,5 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ManageTeamDto {
     String title;
+    String work;
     String paragraph;
 }

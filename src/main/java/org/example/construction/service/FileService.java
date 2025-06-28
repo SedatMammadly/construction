@@ -68,7 +68,9 @@ public class FileService {
     public boolean removeFile(String fileName) {
         try {
             Path filePath = this.storageDirectory.resolve(fileName);
-            return Files.deleteIfExists(filePath);
+            boolean deleted = Files.deleteIfExists(filePath);
+            System.out.println("Silindi mi? " + fileName + ": " + deleted);
+            return deleted;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

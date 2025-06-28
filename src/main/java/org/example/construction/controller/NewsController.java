@@ -32,7 +32,7 @@ public class NewsController {
         return ResponseEntity.ok(newsService.getAll());
     }
 
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<News> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(newsRepository.findBySlug(slug));
     }
@@ -49,10 +49,9 @@ public class NewsController {
     @PutMapping("/{id}")
     public ResponseEntity<News> update(@PathVariable int id, @RequestPart(name = "request") NewsUpdateDto newsUpdateDto,
                                        @RequestPart(required = false) List<MultipartFile> images) throws IOException {
-        final var updatedNews = newsService.update(id, newsUpdateDto, images);
-        final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(updatedNews.getId()).toUri();
-        return ResponseEntity.created(uri).body(updatedNews);
+        News updatedNews = newsService.update(id, newsUpdateDto, images);
+
+        return ResponseEntity.status(201).body(updatedNews);
     }
 
     @DeleteMapping("/{id}")

@@ -16,6 +16,7 @@ public class ManageTeam {
     Long id;
     String image;
     String title;
+    String work;
     @Column(columnDefinition = "TEXT")
     String paragraph;
 }

@@ -28,7 +28,7 @@ KsmController {
         return ResponseEntity.ok(ksmRepository.findAll());
     }
 
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<Ksm> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(ksmRepository.findBySlug(slug));
     }
@@ -46,7 +46,7 @@ KsmController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Ksm> updateKsmCard(@PathVariable int id, @RequestPart(name = "request") KsmCardDto ksmCardDto,
                                              @RequestPart(required = false) MultipartFile icon,
                                              @RequestPart(required = false) List<MultipartFile> images) throws IOException {
@@ -54,7 +54,7 @@ KsmController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteKsmCard(@PathVariable int id) {
         ksmService.deleteKsmCard(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

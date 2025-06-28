@@ -21,6 +21,7 @@ public class ManageTeamService {
     public ManageTeam save(ManageTeamDto dto, MultipartFile file) throws IOException {
         ManageTeam team = new ManageTeam();
         team.setTitle(dto.getTitle());
+        team.setWork(dto.getWork());
         team.setParagraph(dto.getParagraph());
         team.setImage(fileService.uploadFile(file));
         return repository.save(team);
@@ -30,6 +31,7 @@ public class ManageTeamService {
         ManageTeam existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Team member not found with id: " + id));
         fileService.removeFile(existing.getImage());
+        existing.setWork(dto.getWork());
         existing.setTitle(dto.getTitle());
         existing.setParagraph(dto.getParagraph());
         existing.setImage(fileService.uploadFile(file));

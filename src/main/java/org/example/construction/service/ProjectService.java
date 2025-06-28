@@ -39,11 +39,6 @@ public class ProjectService {
     public Projects updateProject(Integer id, ProjectRequest projectDto, List<MultipartFile> images) throws IOException {
         Projects existingProject = projectsRepository.findById(id).orElseThrow();
 
-        // köhnə şəkilləri sil
-        if (existingProject.getImages() != null) {
-            fileService.deleteFiles(existingProject.getImages());
-        }
-
         existingProject.setName(projectDto.getName());
         existingProject.setContent(projectDto.getContent());
         existingProject.setConstructDate(projectDto.getContructDate());
@@ -51,11 +46,19 @@ public class ProjectService {
         existingProject.setOrderOwner(projectDto.getOrderOwner());
 
         if (images != null && !images.isEmpty()) {
-            existingProject.setImages(fileService.uploadFiles(images));
+            // Eski dosyaları sil
+            if (existingProject.getImages() != null) {
+                fileService.deleteFiles(existingProject.getImages());
+                existingProject.getImages().clear(); // burada koleksiyonu temizle
+            }
+            // Yeni dosyaları yükle ve koleksiyona ekle
+            existingProject.getImages().addAll(fileService.uploadFiles(images));
         }
 
         return projectsRepository.save(existingProject);
     }
+
+
 
     public void deleteProject(Integer id) {
         Optional<Projects> optionalProject = projectsRepository.findById(id);

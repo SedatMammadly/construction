@@ -39,7 +39,7 @@ public class CertificateController {
     }
 
     @PutMapping("/{id}")
-    public Certificate update(@PathVariable Long id, @RequestBody CertificateDto certificateDto, @RequestPart MultipartFile file) throws IOException {
+    public Certificate update(@PathVariable Long id, @RequestPart CertificateDto certificateDto, @RequestPart MultipartFile file) throws IOException {
         return certificateService.update(id, certificateDto,file);
     }
 

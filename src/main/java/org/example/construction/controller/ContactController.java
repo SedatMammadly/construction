@@ -5,6 +5,7 @@ import org.example.construction.dto.ContactCardDto;
 import org.example.construction.dto.ContactMessageDto;
 import org.example.construction.model.Contact;
 import org.example.construction.model.ContactMessage;
+import org.example.construction.repository.ContactRepository;
 import org.example.construction.service.ContactService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/contact")
 @RequiredArgsConstructor
 public class ContactController {
     private final ContactService contactService;
-
+private final ContactRepository contactRepository;
     @GetMapping
     public ResponseEntity<Contact> getContactPage() {
         return ResponseEntity.ok(contactService.getContactPage());
@@ -31,15 +33,19 @@ public class ContactController {
         Contact contact = contactService.addContact(ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Contact>> getByIdContact(@PathVariable int id) {
+        return ResponseEntity.ok(contactRepository.findById(id));
+    }
 
-    @PutMapping("/update/contactCard/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Contact> updateContactCard(@PathVariable int id, @RequestPart(name = "request") ContactCardDto ContactCardDto,
                                                      @RequestPart(required = false) MultipartFile icon) throws IOException {
         Contact contact = contactService.updateContact(id, ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
-    @DeleteMapping("/delete/contactCard/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContactCard(@PathVariable int id) {
         contactService.deleteContact(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

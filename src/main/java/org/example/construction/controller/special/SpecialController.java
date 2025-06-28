@@ -35,7 +35,7 @@ public class SpecialController {
         return ResponseEntity.ok(specialService.getAllSpecials());
     }
 
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<Special> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(specialRepository.findBySlug(slug));
     }
