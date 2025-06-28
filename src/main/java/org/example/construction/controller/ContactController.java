@@ -23,8 +23,8 @@ public class ContactController {
     private final ContactService contactService;
 private final ContactRepository contactRepository;
     @GetMapping
-    public ResponseEntity<Contact> getContactPage() {
-        return ResponseEntity.ok(contactService.getContactPage());
+    public ResponseEntity<List<Contact>> getContactPage() {
+        return ResponseEntity.ok(contactRepository.findAll());
     }
 
     @PostMapping
