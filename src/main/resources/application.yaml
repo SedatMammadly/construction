@@ -2,16 +2,15 @@ spring:
   application:
     name: construction
   datasource:
-    url: jdbc:postgresql://localhost:5434/Construction
-#    url: jdbc:postgresql://construction:5432/Construction
+#    url: jdbc:postgresql://localhost:5434/Construction
+    url: jdbc:postgresql://construction:5432/Construction
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: create-drop
