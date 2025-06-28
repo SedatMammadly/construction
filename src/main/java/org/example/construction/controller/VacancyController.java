@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ApplicantDto;
 import org.example.construction.dto.VacancyDto;
 import org.example.construction.model.Applicant;
-import org.example.construction.model.News;
 import org.example.construction.model.Vacancy;
 import org.example.construction.repository.ApplicantRepository;
-import org.example.construction.repository.NewsRepository;
 import org.example.construction.repository.VacancyRepository;
 import org.example.construction.service.VacancyService;
 import org.springframework.http.HttpStatus;
@@ -18,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/vacancy")
@@ -25,15 +24,18 @@ import java.util.List;
 public class VacancyController {
     private final VacancyService vacancyService;
     private final ApplicantRepository applicantRepository;
-private final VacancyRepository vacancyRepository;
+    private final VacancyRepository vacancyRepository;
+
     @GetMapping("/{id}")
     public ResponseEntity<Vacancy> getById(@PathVariable int id) {
         return ResponseEntity.ok(vacancyService.findById(id));
     }
+
     @GetMapping("/slug/{slug}")
     public ResponseEntity<Vacancy> getBySlug(@PathVariable String slug) {
         return ResponseEntity.status(200).body(vacancyRepository.findBySlug(slug));
     }
+
     @GetMapping
     public ResponseEntity<List<Vacancy>> getAll() {
         return ResponseEntity.ok(vacancyService.findAll());
@@ -42,6 +44,17 @@ private final VacancyRepository vacancyRepository;
     @GetMapping("/applicant")
     public ResponseEntity<List<Applicant>> getAllApplicants() {
         return ResponseEntity.ok(applicantRepository.findAll());
+    }
+
+    @GetMapping("/applicant/{id}")
+    public ResponseEntity<Optional<Applicant>> getApplicant(@PathVariable int id) {
+        return ResponseEntity.ok(applicantRepository.findById(id));
+    }
+
+    @DeleteMapping("/applicant/delete/{id}")
+    public ResponseEntity<Void> deleteApplicant(@PathVariable int id) {
+        applicantRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/apply")
