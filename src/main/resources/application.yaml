@@ -16,10 +16,10 @@ spring:
       ddl-auto: create-drop
   data:
     redis:
-      host: localhost
-      port: 6380
-#      host: redis
-#      port: 6379
+#      host: localhost
+#      port: 6380
+      host: redis
+      port: 6379
       password: construction-redis-p@ss
       connect-timeout: 60000
       client-type: lettuce
