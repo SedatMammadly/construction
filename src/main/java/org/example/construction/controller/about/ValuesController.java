@@ -17,29 +17,34 @@ public class ValuesController {
 
     private final ValuesService service;
 
-    @PostMapping
-    public Values create(@RequestPart ValuesDto dto, @RequestPart MultipartFile file) throws IOException {
+    @PostMapping("/add")
+    public Values add(
+            @RequestPart ValuesDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
         return service.save(dto, file);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Values> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Values getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public Values update(@PathVariable Long id,
-                         @RequestPart ValuesDto dto,
-                         @RequestPart MultipartFile file) throws IOException {
+    @PutMapping("/update/{id}")
+    public Values update(
+            @PathVariable Long id,
+            @RequestPart ValuesDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
         return service.update(id, dto, file);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

@@ -14,7 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/news")
 @RequiredArgsConstructor
@@ -22,39 +21,45 @@ public class NewsController {
     private final NewsService newsService;
     private final NewsRepository newsRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<News> getById(@PathVariable int id) {
         return ResponseEntity.ok(newsService.getById(id));
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<News>> getAll() {
         return ResponseEntity.ok(newsService.getAll());
     }
 
-    @GetMapping("/slug/{slug}")
+    @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<News> getBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(newsRepository.findBySlug(slug));
+        return ResponseEntity.ok(newsRepository.findBySlug(slug));
     }
 
-    @PostMapping
-    public ResponseEntity<News> create(@RequestPart(name = "request") NewsDto newsDto,
-                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+    @PostMapping("/add")
+    public ResponseEntity<News> create(
+            @RequestPart(name = "request") NewsDto newsDto,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         final var createdNews = newsService.save(newsDto, images);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(createdNews.getId()).toUri();
+                .path("/{id}")
+                .buildAndExpand(createdNews.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(createdNews);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<News> update(@PathVariable int id, @RequestPart(name = "request") NewsUpdateDto newsUpdateDto,
-                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<News> update(
+            @PathVariable int id,
+            @RequestPart(name = "request") NewsUpdateDto newsUpdateDto,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         News updatedNews = newsService.update(id, newsUpdateDto, images);
-
         return ResponseEntity.status(201).body(updatedNews);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         newsService.deleteById(id);
         return ResponseEntity.noContent().build();

@@ -17,27 +17,34 @@ public class MissionsController {
 
     private final MissionsService service;
 
-    @PostMapping
-    public Missions create(@RequestPart MissionsDto dto, @RequestPart MultipartFile file) throws IOException {
-        return service.save(dto,file);
+    @PostMapping("/add")
+    public Missions add(
+            @RequestPart MissionsDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
+        return service.save(dto, file);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Missions> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Missions getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public Missions update(@PathVariable Long id, @RequestPart MissionsDto dto, @RequestPart MultipartFile file) throws IOException {
-        return service.update(id, dto,file);
+    @PutMapping("/update/{id}")
+    public Missions update(
+            @PathVariable Long id,
+            @RequestPart MissionsDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
+        return service.update(id, dto, file);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

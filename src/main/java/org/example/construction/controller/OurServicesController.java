@@ -2,11 +2,9 @@ package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ourservices.CardDto;
-import org.example.construction.dto.ourservices.ContentDto;
 import org.example.construction.dto.ourservices.HeadCategoryDto;
 import org.example.construction.dto.ourservices.SubCategoryDto;
 import org.example.construction.model.service.Card;
-import org.example.construction.model.service.Content;
 import org.example.construction.model.service.HeadCategory;
 import org.example.construction.model.service.SubCategory;
 import org.example.construction.repository.service.CardRepository;
@@ -34,107 +32,122 @@ public class OurServicesController {
     private final CardRepository cardRepository;
     private final SubCategoryRepository subCategoryRepository;
 
-    /// /////////////////// CARD //////////////////////
+    ////////////////////// CARD //////////////////////
 
-    @PostMapping("/card/create")
-    public Card createCard(@RequestPart CardDto cardDto, MultipartFile mainImage, List<MultipartFile> images) throws IOException {
+    @PostMapping("/card/add")
+    public Card addCard(
+            @RequestPart CardDto cardDto,
+            @RequestPart MultipartFile mainImage,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         return cardService.createCard(cardDto, mainImage, images);
     }
 
-    @GetMapping("/card/slug/{slug}")
+    @GetMapping("/card/getBySlug/{slug}")
     public ResponseEntity<Card> getCardBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(cardRepository.findBySlug(slug));
+        return ResponseEntity.ok(cardRepository.findBySlug(slug));
     }
 
-    @GetMapping("/card/{id}")
+    @GetMapping("/card/get/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable Long id) {
         return cardService.getCardById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/card/all")
+    @GetMapping("/card/getAll")
     public List<Card> getAllCards() {
         return cardService.getAllCards();
     }
 
-    @PutMapping("/card/{id}")
-    public Card updateCard(@PathVariable Long id, @RequestPart CardDto cardDto, MultipartFile mainImage, List<MultipartFile> images) throws IOException {
+    @PutMapping("/card/update/{id}")
+    public Card updateCard(
+            @PathVariable Long id,
+            @RequestPart CardDto cardDto,
+            @RequestPart MultipartFile mainImage,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         return cardService.updateCard(id, cardDto, mainImage, images);
     }
 
-    @DeleteMapping("/card/{id}")
+    @DeleteMapping("/card/delete/{id}")
     public void deleteCard(@PathVariable Long id) {
         cardService.deleteCard(id);
     }
 
-    @GetMapping("/card/head-category/{headCategorySlug}")
+    @GetMapping("/card/getByHeadCategory/{headCategorySlug}")
     public List<Card> getCardsByHeadCategorySlug(@PathVariable String headCategorySlug) {
         return cardService.getCardsByHeadCategorySlug(headCategorySlug);
     }
 
-    @GetMapping("/card/sub-category/{subCategorySlug}")
+    @GetMapping("/card/getBySubCategory/{subCategorySlug}")
     public List<Card> getCardsBySubCategorySlug(@PathVariable String subCategorySlug) {
         return cardService.getCardsBySubCategorySlug(subCategorySlug);
     }
 
-    /// /////////////////// HEAD CATEGORY //////////////////////
+    ////////////////////// HEAD CATEGORY //////////////////////
 
-    @PostMapping("/head-category/create")
-    public HeadCategory createHeadCategory(@RequestBody HeadCategoryDto headCategoryDto) {
+    @PostMapping("/head-category/add")
+    public HeadCategory addHeadCategory(@RequestBody HeadCategoryDto headCategoryDto) {
         return headCategoryService.createHeadCategory(headCategoryDto);
     }
 
-    @GetMapping("/head-category/{id}")
+    @GetMapping("/head-category/get/{id}")
     public ResponseEntity<HeadCategory> getHeadCategoryById(@PathVariable Long id) {
         return headCategoryService.getHeadCategoryById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/head-category/all")
+    @GetMapping("/head-category/getAll")
     public List<HeadCategory> getAllHeadCategories() {
         return headCategoryService.getAllHeadCategories();
     }
 
-    @PutMapping("/head-category/{id}")
-    public HeadCategory updateHeadCategory(@PathVariable Long id, @RequestBody HeadCategoryDto headCategoryDto) {
+    @PutMapping("/head-category/update/{id}")
+    public HeadCategory updateHeadCategory(
+            @PathVariable Long id,
+            @RequestBody HeadCategoryDto headCategoryDto
+    ) {
         return headCategoryService.updateHeadCategory(id, headCategoryDto);
     }
 
-    @DeleteMapping("/head-category/{id}")
+    @DeleteMapping("/head-category/delete/{id}")
     public void deleteHeadCategory(@PathVariable Long id) {
         headCategoryService.deleteHeadCategory(id);
     }
 
-    @GetMapping("/head-category/slug/{slug}")
+    @GetMapping("/head-category/getBySlug/{slug}")
     public ResponseEntity<HeadCategory> getHeadCategoryBySlug(@PathVariable String slug) {
         return headCategoryService.getHeadCategoryBySlug(slug)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /// /////////////////// SUB CATEGORY //////////////////////
+    ////////////////////// SUB CATEGORY //////////////////////
 
-    @PostMapping("/sub-category/create")
-    public SubCategory createSubCategory(@RequestBody SubCategoryDto subCategoryDto) {
+    @PostMapping("/sub-category/add")
+    public SubCategory addSubCategory(@RequestBody SubCategoryDto subCategoryDto) {
         return subCategoryService.createSubCategory(subCategoryDto);
     }
 
-    @GetMapping("/sub-category/{id}")
+    @GetMapping("/sub-category/get/{id}")
     public ResponseEntity<SubCategory> getSubCategoryById(@PathVariable Long id) {
         return subCategoryService.getSubCategoryById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/sub-category/all")
+    @GetMapping("/sub-category/getAll")
     public List<SubCategory> getAllSubCategories() {
         return subCategoryService.getAllSubCategories();
     }
 
-    @PutMapping("/sub-category/{id}")
-    public ResponseEntity<SubCategory> updateSubCategory(@PathVariable Long id, @RequestBody String newName) {
+    @PutMapping("/sub-category/update/{id}")
+    public ResponseEntity<SubCategory> updateSubCategory(
+            @PathVariable Long id,
+            @RequestBody String newName
+    ) {
         Optional<SubCategory> subCategoryOpt = subCategoryRepository.findById(id);
 
         if (subCategoryOpt.isEmpty()) {
@@ -144,14 +157,13 @@ public class OurServicesController {
         SubCategory subCategory = subCategoryOpt.get();
         String oldName = subCategory.getName();
 
-        // İlgili kartları bul ve güncelle
+        // kartların subcategory isimlerini de güncelle
         List<Card> cards = cardRepository.findBySubCategory(oldName);
         for (Card card : cards) {
             card.setSubCategory(newName);
             cardRepository.save(card);
         }
 
-        // SubCategory ismini ve slug'ını güncelle
         subCategory.setName(newName);
         subCategory.setSlug(SlugUtil.toSlug(newName));
         subCategoryRepository.save(subCategory);
@@ -159,18 +171,17 @@ public class OurServicesController {
         return ResponseEntity.ok(subCategory);
     }
 
-
-    @DeleteMapping("/sub-category/{id}")
+    @DeleteMapping("/sub-category/delete/{id}")
     public void deleteSubCategory(@PathVariable Long id) {
         subCategoryService.deleteSubCategory(id);
     }
 
-    @GetMapping("/sub-category/head/slug/{headSlug}")
+    @GetMapping("/sub-category/getByHeadSlug/{headSlug}")
     public List<SubCategory> getSubCategoriesByHeadSlug(@PathVariable String headSlug) {
         return subCategoryService.getSubCategoriesByHeadSlug(headSlug);
     }
 
-    @GetMapping("/sub-category/slug/{slug}")
+    @GetMapping("/sub-category/getBySlug/{slug}")
     public ResponseEntity<SubCategory> getSubCategoryBySlug(@PathVariable String slug) {
         return subCategoryService.getSubCategoryBySlug(slug)
                 .map(ResponseEntity::ok)

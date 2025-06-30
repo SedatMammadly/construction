@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Logo {
+public class Social {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Integer id;

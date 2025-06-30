@@ -2,9 +2,7 @@ package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ProjectRequest;
-import org.example.construction.dto.ProjectUpdateDto;
 import org.example.construction.model.Projects;
-import org.example.construction.model.Vacancy;
 import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.service.ProjectService;
 import org.springframework.http.ResponseEntity;
@@ -21,45 +19,43 @@ public class ProjectsController {
     private final ProjectService projectService;
     private final ProjectsRepository projectsRepository;
 
-    @GetMapping("{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Projects> getProjectsById(@PathVariable Integer id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
-    @GetMapping("/slug/{slug}")
+
+    @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<Projects> getBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(projectsRepository.findBySlug(slug));
-    }
-    @GetMapping
-    public ResponseEntity<Projects> getProjectBySlug(@RequestParam String slug) {
-        return ResponseEntity.ok(projectService.getProjectBySlug(slug));
+        return ResponseEntity.ok(projectsRepository.findBySlug(slug));
     }
 
-    @GetMapping("/getAllProjects")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Projects>> getProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
-    @PostMapping
-    public ResponseEntity<Projects> addProject(@RequestPart("request") ProjectRequest request,
-                                               @RequestPart(required = false) List<MultipartFile> images
+    @PostMapping("/add")
+    public ResponseEntity<Projects> addProject(
+            @RequestPart("request") ProjectRequest request,
+            @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
         Projects project = projectService.addProject(request, images);
         return ResponseEntity.ok(project);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Projects> updateProject(@PathVariable Integer id,
-                                                  @RequestPart("request") ProjectRequest request,
-                                                  @RequestPart(required = false) List<MultipartFile> images
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Projects> updateProject(
+            @PathVariable Integer id,
+            @RequestPart("request") ProjectRequest request,
+            @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
         Projects project = projectService.updateProject(id, request, images);
         return ResponseEntity.ok(project);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable Integer id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteProject(@PathVariable Integer id) {
         projectService.deleteProject(id);
         return ResponseEntity.ok("Project deleted successfully.");
     }
-
 }

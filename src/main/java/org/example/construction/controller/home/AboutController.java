@@ -19,28 +19,28 @@ public class AboutController {
     private final HomeService homeService;
     private final HomeAboutRepository homeAboutRepository;
 
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity<List<About>> findAbout() {
         return ResponseEntity.ok(homeAboutRepository.findAll());
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<About> addAbout(@RequestPart(required = false, name = "request") AboutDto aboutDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createAbout(aboutDto));
 
     }
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Optional<About>> getByAboutId(@PathVariable Long id) {
         return ResponseEntity.ok(homeAboutRepository.findById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<About> updateAbout(@PathVariable Long id,
                                              @RequestPart(required = false, name = "request") AboutDto aboutDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateAbout(aboutDto, id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/update/{id}")
     public ResponseEntity<Void> deleteAbout(@PathVariable Long id) {
         homeService.deleteAbout(id);
         return ResponseEntity.noContent().build();

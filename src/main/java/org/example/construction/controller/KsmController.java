@@ -14,49 +14,52 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/v1/ksm")
 @RequiredArgsConstructor
-public class
-KsmController {
+public class KsmController {
     private final KsmService ksmService;
     private final KsmRepository ksmRepository;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Ksm>> getAllKsms() {
         return ResponseEntity.ok(ksmRepository.findAll());
     }
 
-    @GetMapping("/slug/{slug}")
+    @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<Ksm> getBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(ksmRepository.findBySlug(slug));
+        return ResponseEntity.ok(ksmRepository.findBySlug(slug));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Optional<Ksm>> getKsmById(@PathVariable Integer id) {
         return ResponseEntity.ok(ksmRepository.findById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<Ksm> addKsmCards(@RequestPart(name = "request") KsmCardDto ksmCardDto,
-                                           @RequestPart() MultipartFile icon,
-                                           @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+    @PostMapping("/add")
+    public ResponseEntity<Ksm> addKsmCards(
+            @RequestPart(name = "request") KsmCardDto ksmCardDto,
+            @RequestPart MultipartFile icon,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         Ksm ksm = ksmService.addKsmCards(ksmCardDto, images, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Ksm> updateKsmCard(@PathVariable int id, @RequestPart(name = "request") KsmCardDto ksmCardDto,
-                                             @RequestPart(required = false) MultipartFile icon,
-                                             @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Ksm> updateKsmCard(
+            @PathVariable int id,
+            @RequestPart(name = "request") KsmCardDto ksmCardDto,
+            @RequestPart(required = false) MultipartFile icon,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         Ksm ksm = ksmService.updateKsmCard(id, ksmCardDto, icon, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteKsmCard(@PathVariable int id) {
         ksmService.deleteKsmCard(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 }

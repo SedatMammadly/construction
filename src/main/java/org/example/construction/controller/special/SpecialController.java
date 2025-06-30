@@ -21,7 +21,7 @@ public class SpecialController {
     private final SpecialService specialService;
     private final SpecialRepository specialRepository;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Special> createSpecial(
             @RequestPart("specialDto") SpecialDto specialDto,
             @RequestPart("images") List<MultipartFile> images
@@ -30,24 +30,24 @@ public class SpecialController {
         return ResponseEntity.ok(created);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Special>> getAll() {
         return ResponseEntity.ok(specialService.getAllSpecials());
     }
 
-    @GetMapping("/slug/{slug}")
+    @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<Special> getBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(specialRepository.findBySlug(slug));
+        return ResponseEntity.ok(specialRepository.findBySlug(slug));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Special> getById(@PathVariable Long id) {
         return specialService.getSpecialById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Special> update(
             @PathVariable Long id,
             @RequestPart("specialDto") SpecialDto specialDto,
@@ -57,7 +57,7 @@ public class SpecialController {
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         specialService.deleteSpecial(id);
         return ResponseEntity.noContent().build();

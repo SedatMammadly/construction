@@ -21,34 +21,41 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ContactController {
     private final ContactService contactService;
-private final ContactRepository contactRepository;
-    @GetMapping
+    private final ContactRepository contactRepository;
+
+    @GetMapping("/getAll")
     public ResponseEntity<List<Contact>> getContactPage() {
         return ResponseEntity.ok(contactRepository.findAll());
     }
 
-    @PostMapping
-    public ResponseEntity<Contact> addContactCards(@RequestPart(name = "request") ContactCardDto ContactCardDto,
-                                                   @RequestPart(required = true) MultipartFile icon) throws IOException {
-        Contact contact = contactService.addContact(ContactCardDto, icon);
+    @PostMapping("/add")
+    public ResponseEntity<Contact> addContactCards(
+            @RequestPart(name = "request") ContactCardDto contactCardDto,
+            @RequestPart MultipartFile icon
+    ) throws IOException {
+        Contact contact = contactService.addContact(contactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
-    @GetMapping("/{id}")
+
+    @GetMapping("/get/{id}")
     public ResponseEntity<Optional<Contact>> getByIdContact(@PathVariable int id) {
         return ResponseEntity.ok(contactRepository.findById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContactCard(@PathVariable int id, @RequestPart(name = "request") ContactCardDto ContactCardDto,
-                                                     @RequestPart(required = false) MultipartFile icon) throws IOException {
-        Contact contact = contactService.updateContact(id, ContactCardDto, icon);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Contact> updateContactCard(
+            @PathVariable int id,
+            @RequestPart(name = "request") ContactCardDto contactCardDto,
+            @RequestPart(required = false) MultipartFile icon
+    ) throws IOException {
+        Contact contact = contactService.updateContact(id, contactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteContactCard(@PathVariable int id) {
         contactService.deleteContact(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/getAll/contactMessages")
@@ -57,8 +64,7 @@ private final ContactRepository contactRepository;
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<String>sendContactMessage(@RequestBody ContactMessageDto contactMessageDto){
+    public ResponseEntity<String> sendContactMessage(@RequestBody ContactMessageDto contactMessageDto) {
         return ResponseEntity.ok(contactService.sendContactMessage(contactMessageDto));
     }
-
 }

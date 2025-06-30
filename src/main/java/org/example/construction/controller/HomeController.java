@@ -18,7 +18,7 @@ import java.util.List;
 public class HomeController {
     private final HomeService homeService;
 
-    @GetMapping
+    @GetMapping("/all")
     public Home getHome() {
         return homeService.getHome();
     }

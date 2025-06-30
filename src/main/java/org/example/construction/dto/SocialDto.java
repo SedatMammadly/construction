@@ -6,6 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LogoDto {
-    String name;
+public class SocialDto {
+    String title;
 }

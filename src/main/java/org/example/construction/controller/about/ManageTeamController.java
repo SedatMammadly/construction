@@ -1,11 +1,6 @@
 package org.example.construction.controller.about;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ManageTeamDto;
 import org.example.construction.model.about.ManageTeam;
 import org.example.construction.service.about.ManageTeamService;
@@ -22,29 +17,34 @@ public class ManageTeamController {
 
     private final ManageTeamService service;
 
-    @PostMapping
-    public ManageTeam create(@RequestPart ManageTeamDto dto, @RequestPart MultipartFile file) throws IOException {
+    @PostMapping("/add")
+    public ManageTeam add(
+            @RequestPart ManageTeamDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
         return service.save(dto, file);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<ManageTeam> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ManageTeam getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public ManageTeam update(@PathVariable Long id,
-                             @RequestPart ManageTeamDto dto,
-                             @RequestPart MultipartFile file) throws IOException {
+    @PutMapping("/update/{id}")
+    public ManageTeam update(
+            @PathVariable Long id,
+            @RequestPart ManageTeamDto dto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
         return service.update(id, dto, file);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

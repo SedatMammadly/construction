@@ -26,63 +26,73 @@ public class VacancyController {
     private final ApplicantRepository applicantRepository;
     private final VacancyRepository vacancyRepository;
 
-    @GetMapping("/{id}")
+    /// ======================= Vacancy ===========================
+
+    @GetMapping("/get/{id}")
     public ResponseEntity<Vacancy> getById(@PathVariable int id) {
         return ResponseEntity.ok(vacancyService.findById(id));
     }
 
-    @GetMapping("/slug/{slug}")
+    @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<Vacancy> getBySlug(@PathVariable String slug) {
-        return ResponseEntity.status(200).body(vacancyRepository.findBySlug(slug));
+        return ResponseEntity.ok(vacancyRepository.findBySlug(slug));
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Vacancy>> getAll() {
         return ResponseEntity.ok(vacancyService.findAll());
     }
 
-    @GetMapping("/applicant")
-    public ResponseEntity<List<Applicant>> getAllApplicants() {
-        return ResponseEntity.ok(applicantRepository.findAll());
-    }
-
-    @GetMapping("/applicant/{id}")
-    public ResponseEntity<Optional<Applicant>> getApplicant(@PathVariable int id) {
-        return ResponseEntity.ok(applicantRepository.findById(id));
-    }
-
-    @DeleteMapping("/applicant/delete/{id}")
-    public ResponseEntity<Void> deleteApplicant(@PathVariable int id) {
-        applicantRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/apply")
-    public ResponseEntity<String> apply(@RequestPart(name = "request") ApplicantDto applicantDto, @RequestPart MultipartFile file) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.apply(applicantDto, file));
-    }
-
-    @PostMapping
-    public ResponseEntity<Vacancy> create(@RequestPart(name = "request") VacancyDto vacancyDto,
-                                          @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+    @PostMapping("/add")
+    public ResponseEntity<Vacancy> add(
+            @RequestPart(name = "request") VacancyDto vacancyDto,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) throws IOException {
         final var createdVacancy = vacancyService.save(vacancyDto, images);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(createdVacancy.getId()).toUri();
         return ResponseEntity.created(uri).body(createdVacancy);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Vacancy> update(@PathVariable int id, @RequestPart(name = "request") VacancyDto vacancyDto,
-                                          @RequestPart(required = false) List<MultipartFile> images) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Vacancy> update(
+            @PathVariable int id,
+            @RequestPart(name = "request") VacancyDto vacancyDto,
+            @RequestPart(required = false) List<MultipartFile> images
+    ) {
         final var updatedVacancy = vacancyService.update(id, vacancyDto, images);
-        final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(updatedVacancy.getId()).toUri();
-        return ResponseEntity.created(uri).body(updatedVacancy);
+        return ResponseEntity.ok(updatedVacancy);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         vacancyService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /// ======================= Applicant ===========================
+
+    @GetMapping("/applicant/getAll")
+    public ResponseEntity<List<Applicant>> getAllApplicants() {
+        return ResponseEntity.ok(applicantRepository.findAll());
+    }
+
+    @GetMapping("/applicant/get/{id}")
+    public ResponseEntity<Optional<Applicant>> getApplicant(@PathVariable int id) {
+        return ResponseEntity.ok(applicantRepository.findById(id));
+    }
+
+    @PostMapping("/applicant/apply")
+    public ResponseEntity<String> apply(
+            @RequestPart(name = "request") ApplicantDto applicantDto,
+            @RequestPart MultipartFile file
+    ) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.apply(applicantDto, file));
+    }
+
+    @DeleteMapping("/applicant/delete/{id}")
+    public ResponseEntity<Void> deleteApplicant(@PathVariable int id) {
+        applicantRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

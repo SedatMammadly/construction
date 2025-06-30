@@ -11,34 +11,39 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/carousel")
 @RequiredArgsConstructor
 public class CarouselController {
     private final HomeService homeService;
 
-    @GetMapping
-    public ResponseEntity<List<Carousel>> getCarousel() {
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Carousel>> getAllCarousels() {
         return ResponseEntity.ok(homeService.getCarousels());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Carousel> updateCarousel(@PathVariable Long id, @RequestPart(name = "request") CarouselDto carouselDto,
+    // İstersen tek item getirmek için:
+    // @GetMapping("/get/{id}")
+    // public ResponseEntity<Carousel> getCarousel(@PathVariable Long id) {
+    //     return ResponseEntity.ok(homeService.getCarouselById(id));
+    // }
+
+    @PostMapping("/add")
+    public ResponseEntity<Carousel> addCarousel(@RequestPart(name = "request") CarouselDto dto,
+                                                @RequestPart MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createCarousel(dto, image));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Carousel> updateCarousel(@PathVariable Long id,
+                                                   @RequestPart(name = "request") CarouselDto carouselDto,
                                                    @RequestPart(required = false) MultipartFile image) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateCarousel(carouselDto, image, id));
     }
 
-
-    @PostMapping
-    public ResponseEntity<Carousel> create(@RequestPart(name = "request") CarouselDto dto, @RequestPart MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.createCarousel(dto, image));
-    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCarousel(@PathVariable Long id) {
         homeService.deleteCarousel(id);
         return ResponseEntity.noContent().build();
     }
-
 }
