@@ -40,7 +40,7 @@ public class AboutController {
         return ResponseEntity.status(HttpStatus.CREATED).body(homeService.updateAbout(aboutDto, id));
     }
 
-    @DeleteMapping("/update/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAbout(@PathVariable Long id) {
         homeService.deleteAbout(id);
         return ResponseEntity.noContent().build();

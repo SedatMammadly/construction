@@ -22,30 +22,30 @@ import java.util.Optional;
 public class ContactController {
     private final ContactService contactService;
 private final ContactRepository contactRepository;
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Contact>> getContacts() {
         return ResponseEntity.ok(contactService.getContacts());
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Contact> addContactCards(@RequestPart(name = "request") ContactCardDto ContactCardDto,
                                                    @RequestPart(required = true) MultipartFile icon) throws IOException {
         Contact contact = contactService.addContact(ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Optional<Contact>> getByIdContact(@PathVariable int id) {
         return ResponseEntity.ok(contactRepository.findById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Contact> updateContactCard(@PathVariable int id, @RequestPart(name = "request") ContactCardDto ContactCardDto,
                                                      @RequestPart(required = false) MultipartFile icon) throws IOException {
         Contact contact = contactService.updateContact(id, ContactCardDto, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(contact);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteContactCard(@PathVariable int id) {
         contactService.deleteContact(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
