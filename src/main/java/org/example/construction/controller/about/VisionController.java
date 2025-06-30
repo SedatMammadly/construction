@@ -13,12 +13,12 @@ public class VisionController {
 
     private final VisionService service;
 
-    @PostMapping
+    @PostMapping("/edit")
     public Vision create(@RequestBody VisionDto dto) {
         return service.save(dto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public Vision get() {
         return service.get();
     }

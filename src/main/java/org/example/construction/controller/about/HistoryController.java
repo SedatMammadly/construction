@@ -13,12 +13,12 @@ public class HistoryController {
 
     private final HistoryService service;
 
-    @PostMapping
+    @PostMapping("/edit")
     public History create(@RequestBody HistoryDto dto) {
         return service.save(dto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public History get() {
         return service.get();
     }

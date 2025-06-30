@@ -14,12 +14,12 @@ public class ManagementStructureController {
 
     private final ManagementStructureService service;
 
-    @PostMapping
+    @PostMapping("/edit")
     public ManagementStructure create(@RequestBody ManagementStructureDto dto) {
         return service.save(dto);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public ManagementStructure get() {
         return service.get();
     }

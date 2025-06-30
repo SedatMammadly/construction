@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class AboutUsController {
     private final AboutService aboutService;
 
-    @GetMapping
+    @GetMapping("/get")
     public About getAbout() {
         return aboutService.get();
     }
