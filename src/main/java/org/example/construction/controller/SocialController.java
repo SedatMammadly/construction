@@ -43,7 +43,7 @@ public class SocialController {
     ) throws IOException {
         return service.update(id, dto, image);
     }
-
+//salam
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {
         service.delete(id);
