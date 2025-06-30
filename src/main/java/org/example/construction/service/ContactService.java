@@ -24,8 +24,8 @@ public class ContactService {
     private final PojoMapper pojoMapper;
 
     private final ContactMessageRepository contactMessageRepository;
-    public Contact getContactPage() {
-        return contactRepository.findAll().getFirst();
+    public List<Contact> getContacts() {
+        return contactRepository.findAll();
     }
 
     public Contact addContact(ContactCardDto contactDto, MultipartFile icon) throws IOException {
@@ -72,5 +72,10 @@ public class ContactService {
 
     public List<ContactMessage> getAllContactMessages() {
         return contactMessageRepository.findAll();
+    }
+
+
+    public void deleteContactMessage(Integer id) {
+        contactMessageRepository.deleteById(id);
     }
 }
