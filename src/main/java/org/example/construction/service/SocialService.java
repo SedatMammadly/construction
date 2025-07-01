@@ -20,7 +20,7 @@ public class SocialService {
     public Social create(SocialDto dto, MultipartFile image) throws IOException {
         Social social = new Social();
         social.setTitle(dto.getTitle());
-
+social.setLink(dto.getLink());
         if (image != null) {
             // Örneğin dosya adını kaydet
             social.setImage(fileService.uploadFile(image));
@@ -42,6 +42,8 @@ public class SocialService {
     public Social update(Integer id, SocialDto dto, MultipartFile image) throws IOException {
         Social social = getById(id);
         social.setTitle(dto.getTitle());
+        social.setLink(dto.getLink());
+
         if (image != null) {
             social.setImage(fileService.uploadFile(image));
         }

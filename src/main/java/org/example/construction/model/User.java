@@ -23,7 +23,7 @@ public class User {
     Long id;
     String username;
     String password;
-
+    String email;
     @Enumerated(EnumType.STRING)
     Role role;
 

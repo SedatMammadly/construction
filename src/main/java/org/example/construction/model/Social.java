@@ -16,5 +16,6 @@ public class Social {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Integer id;
     String title;
+    String link;
     String image;
 }
