@@ -1,5 +1,6 @@
 package org.example.construction.controller.about;
 
+import io.swagger.v3.oas.annotations.headers.Header;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.HistoryDto;
 import org.example.construction.model.about.History;
@@ -14,7 +15,8 @@ public class HistoryController {
     private final HistoryService service;
 
     @PostMapping("/edit")
-    public History create(@RequestBody HistoryDto dto) {
+    public History create(@RequestBody HistoryDto dto,@RequestHeader("Authorization") String authHeader) {
+        System.out.println("Salam");
         return service.save(dto);
     }
 

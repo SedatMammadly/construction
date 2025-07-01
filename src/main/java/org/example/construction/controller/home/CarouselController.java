@@ -22,7 +22,7 @@ public class CarouselController {
         return ResponseEntity.ok(homeService.getCarousels());
     }
 
-    // İstersen tek item getirmek için:
+
     // @GetMapping("/get/{id}")
     // public ResponseEntity<Carousel> getCarousel(@PathVariable Long id) {
     //     return ResponseEntity.ok(homeService.getCarouselById(id));
