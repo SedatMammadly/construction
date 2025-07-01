@@ -1,10 +1,12 @@
 package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.construction.authentication.CustomUserDetails;
 import org.example.construction.dto.ForgetPasswordDto;
 import org.example.construction.dto.ResetPasswordRequest;
 import org.example.construction.model.User;
 import org.example.construction.repository.UserRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,8 @@ public class PasswordChangeService {
         return "Password changed successfully";
     }
 
-    public String resetPassword(String email, ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByUsername(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public String resetPassword(CustomUserDetails userDetails, ResetPasswordRequest resetPasswordRequest) {
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         if (!passwordEncoder.matches(user.getPassword(), resetPasswordRequest.getOldPassword())) {
             throw new RuntimeException("Password does not match old password ");
         }

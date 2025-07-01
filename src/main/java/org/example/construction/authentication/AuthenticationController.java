@@ -3,15 +3,21 @@ package org.example.construction.authentication;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.construction.dto.AuthRequest;
-import org.example.construction.dto.ForgetPasswordDto;
-import org.example.construction.dto.ResetPasswordRequest;
-import org.example.construction.dto.VerificationRequest;
+import org.example.construction.dto.*;
+import org.example.construction.model.User;
+import org.example.construction.repository.UserRepository;
 import org.example.construction.service.PasswordChangeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,20 +25,21 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final PasswordChangeService passwordChangeService;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) {
-       return ResponseEntity.ok(authenticationService.register(authRequest));
+        return ResponseEntity.ok(authenticationService.register(authRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest, HttpSession session) {
-        return ResponseEntity.ok(authenticationService.authenticate(authRequest, session));
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
+        return ResponseEntity.ok(authenticationService.authenticate(authRequest));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        authenticationService.logout(request, response);
+    public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest request) {
+        authenticationService.logout(request);
         return ResponseEntity.ok("Logged out successfully");
     }
 
@@ -42,8 +49,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestBody ResetPasswordRequest resetPasswordRequest) {
-        return ResponseEntity.ok(passwordChangeService.resetPassword(email, resetPasswordRequest));
+    public ResponseEntity<String> resetPassword(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        return ResponseEntity.ok(passwordChangeService.resetPassword(userDetails, resetPasswordRequest));
+    }
+
+    @PutMapping("/reset/email")
+    public ResponseEntity<AuthResponse> resetEmail(@RequestParam(name = "param") String email, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(authenticationService.resetEmail(email, userDetails));
     }
 
     @PostMapping("/verify")
@@ -51,8 +63,4 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.verify(verificationRequest));
     }
 
-    @GetMapping("/csrf-token")
-    public CsrfToken csrf(CsrfToken token) {
-        return token;
-    }
 }

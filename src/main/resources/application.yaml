@@ -3,7 +3,7 @@ spring:
     name: construction
   datasource:
     url: jdbc:postgresql://localhost:5434/Construction
-#    url: jdbc:postgresql://construction:5432/Construction
+    #    url: jdbc:postgresql://construction:5432/Construction
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
@@ -16,10 +16,10 @@ spring:
       ddl-auto: create-drop
   data:
     redis:
-#      host: localhost
-#      port: 6380
-      host: redis
-      port: 6379
+      host: localhost
+      port: 6380
+      #      host: redis
+      #      port: 6379
       password: construction-redis-p@ss
       connect-timeout: 60000
       client-type: lettuce
@@ -36,6 +36,13 @@ spring:
 
 validation-code:
   expireDate: 5
+
+security:
+    key: "jvdIc8VZQrh6T17RAywe6e/3u7wQ/WEXIUuLD1FWYo01yQcjjmjOBfwY/KeHu5cBaNMeJI0pZIMOwNCQuVnMvQ=="
+refresh-token:
+  expiration: 2592000000
+access-token:
+    expiration: 600000
 
 file:
   dir: ./uploads/files
