@@ -1,5 +1,6 @@
 package org.example.construction.authentication;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -28,12 +30,12 @@ public class AuthenticationController {
     private final UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<String> register(@Valid @RequestBody AuthRequest authRequest) {
         return ResponseEntity.ok(authenticationService.register(authRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(authRequest));
     }
 
@@ -61,6 +63,12 @@ public class AuthenticationController {
     @PostMapping("/verify")
     public ResponseEntity<Boolean> verify(@RequestBody VerificationRequest verificationRequest) {
         return ResponseEntity.ok(authenticationService.verify(verificationRequest));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refreshAuthToken(HttpServletRequest request) throws IOException {
+        AuthResponse authResponse = authenticationService.refreshAuthToken(request);
+        return ResponseEntity.ok(authResponse);
     }
 
 }

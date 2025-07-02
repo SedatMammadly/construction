@@ -3,6 +3,7 @@ package org.example.construction.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,6 @@ public class AuthRequest {
     String username;
 
     @NotBlank(message = "password cannot be null")
-    @Min(value = 8)
+    @Size(min = 8,message = "password must be at least 8 characters long")
     String password;
 }

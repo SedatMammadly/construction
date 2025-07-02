@@ -1,8 +1,6 @@
 package org.example.construction.authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.construction.cache.RedisTokenService;
 import org.example.construction.cache.RedisVerificationCodeService;
@@ -15,17 +13,11 @@ import org.example.construction.model.User;
 import org.example.construction.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +28,7 @@ public class AuthenticationService {
     private final RedisVerificationCodeService verificationCodeService;
     private final JwtService jwtService;
     private final RedisTokenService redisTokenService;
+    private final UserDetailsService userDetailsService;
 
     public String register(AuthRequest authRequest) {
         User user = new User();
@@ -44,6 +37,30 @@ public class AuthenticationService {
         user.setRole(Role.ADMIN);
         userRepository.save(user);
         return "Registered successfully";
+    }
+
+    public AuthResponse refreshAuthToken(HttpServletRequest request) throws IOException {
+        String userEmail;
+        String refreshToken;
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid token");
+        }
+        refreshToken = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(refreshToken);
+        if (userEmail != null) {
+            var user = this.userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.validateToken(user, refreshToken)) {
+                String accessToken = jwtService.generateAccessToken(userEmail, user.getAuthorities().toString());
+                return AuthResponse.builder()
+                        .refreshToken(refreshToken)
+                        .accessToken(accessToken).build();
+            } else {
+                throw new RuntimeException("User not found");
+            }
+        } else {
+            throw new RuntimeException("Invalid token");
+        }
     }
 
     public AuthResponse authenticate(AuthRequest request) {
