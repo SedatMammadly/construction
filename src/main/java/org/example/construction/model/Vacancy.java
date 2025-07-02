@@ -22,8 +22,7 @@ public class Vacancy {
     String title;
     @Column(columnDefinition = "TEXT")
     String content;
-    @ElementCollection
-    List<String> images;
+    String image;
     @CreationTimestamp
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     LocalDateTime createdAt;

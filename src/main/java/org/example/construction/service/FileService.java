@@ -65,7 +65,7 @@ public class FileService {
         return new UrlResource(filePath.toUri());
     }
 
-    public boolean removeFile(String fileName) {
+    public boolean deleteFile(String fileName) {
         try {
             Path filePath = this.storageDirectory.resolve(fileName);
             boolean deleted = Files.deleteIfExists(filePath);
@@ -80,7 +80,7 @@ public class FileService {
     public List<Boolean> deleteFiles(List<String> fileNames) {
         List<Boolean> deletionResults = new ArrayList<>();
         for (String fileName : fileNames) {
-            removeFile(fileName);
+            deleteFile(fileName);
         }
         return deletionResults;
     }

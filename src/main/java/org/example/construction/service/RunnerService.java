@@ -14,7 +14,7 @@ public class RunnerService implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         AuthRequest authRequest = new AuthRequest();
-        authRequest.setUsername("Serxan32@gmail.com");
+        authRequest.setUsername("serxanbabayev614@gmail.com");
         authRequest.setPassword("Serxan3232");
         System.out.println(authRequest.getUsername() + " " + authRequest.getPassword());
         authenticationService.register(authRequest);

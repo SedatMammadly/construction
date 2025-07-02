@@ -43,7 +43,7 @@ public class ContactService {
         contact.setDescription(contactDto.getDescription());
 
         if (contact.getIcon() != null) {
-            fileService.removeFile(contact.getIcon());
+            fileService.deleteFile(contact.getIcon());
         }
 
         contact.setIcon(fileService.uploadFile(icon));
@@ -58,7 +58,7 @@ public class ContactService {
             Contact contact = optionalContact.get();
 
             if (contact.getIcon() != null) {
-                fileService.removeFile(contact.getIcon());
+                fileService.deleteFile(contact.getIcon());
             }
 
             contactRepository.deleteById(id);

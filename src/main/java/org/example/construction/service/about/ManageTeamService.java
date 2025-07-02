@@ -30,7 +30,7 @@ public class ManageTeamService {
     public ManageTeam update(Long id, ManageTeamDto dto, MultipartFile file) throws IOException {
         ManageTeam existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Team member not found with id: " + id));
-        fileService.removeFile(existing.getImage());
+        fileService.deleteFile(existing.getImage());
         existing.setWork(dto.getWork());
         existing.setTitle(dto.getTitle());
         existing.setParagraph(dto.getParagraph());

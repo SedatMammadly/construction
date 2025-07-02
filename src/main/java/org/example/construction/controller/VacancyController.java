@@ -46,9 +46,9 @@ public class VacancyController {
     @PostMapping("/add")
     public ResponseEntity<Vacancy> add(
             @RequestPart(name = "request") VacancyDto vacancyDto,
-            @RequestPart(required = false) List<MultipartFile> images
+            @RequestPart(required = false) MultipartFile image
     ) throws IOException {
-        final var createdVacancy = vacancyService.save(vacancyDto, images);
+        final var createdVacancy = vacancyService.save(vacancyDto, image);
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(createdVacancy.getId()).toUri();
         return ResponseEntity.created(uri).body(createdVacancy);
@@ -58,9 +58,9 @@ public class VacancyController {
     public ResponseEntity<Vacancy> update(
             @PathVariable int id,
             @RequestPart(name = "request") VacancyDto vacancyDto,
-            @RequestPart(required = false) List<MultipartFile> images
+            @RequestPart(required = false) MultipartFile image
     ) {
-        final var updatedVacancy = vacancyService.update(id, vacancyDto, images);
+        final var updatedVacancy = vacancyService.update(id, vacancyDto, image);
         return ResponseEntity.ok(updatedVacancy);
     }
 

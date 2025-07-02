@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.KsmCardDto;
 import org.example.construction.mapper.PojoMapper;
 import org.example.construction.model.Ksm;
-import org.example.construction.pojo.KsmCard;
 import org.example.construction.repository.KsmRepository;
 import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +39,7 @@ public class KsmService {
         ksm.setParagraph(ksmCardDto.getParagraph());
         ksm.setSlug(SlugUtil.toSlug(ksmCardDto.getTitle()));
 
-        fileService.removeFile(ksm.getIcon());
+        fileService.deleteFile(ksm.getIcon());
         fileService.deleteFiles(ksm.getImages());
         ksm.setIcon(fileService.uploadFile(icon));
         ksm.setImages(fileService.uploadFiles(images));
@@ -56,10 +54,10 @@ public class KsmService {
         if (imagesList != null) {
             for (int i = 0; i < imagesList.size(); i++) {
                 String imageFile = imagesList.get(i);
-                fileService.removeFile(imageFile);
+                fileService.deleteFile(imageFile);
             }
         }
-        fileService.removeFile(ksmCards.get().getIcon());
+        fileService.deleteFile(ksmCards.get().getIcon());
         ksmRepository.deleteById(id);
 
     }

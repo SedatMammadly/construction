@@ -71,7 +71,7 @@ public class NewsService {
     public void deleteById(int id) {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
         for (String image : news.getImages()) {
-            fileService.removeFile(image);
+            fileService.deleteFile(image);
         }
         newsRepository.deleteById(id);
     }

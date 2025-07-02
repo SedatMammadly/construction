@@ -79,7 +79,7 @@ public class HomeService {
         if (icon != null) {
             String icon1 = whyChooseUs.getIcon();
             if (icon1 != null) {
-                fileService.removeFile(icon1);
+                fileService.deleteFile(icon1);
             }
             String url = fileService.uploadFile(icon);
             whyChooseUs.setIcon(url);
@@ -91,7 +91,7 @@ public class HomeService {
         WhyChooseUs whyChooseUs = whyChooseUsRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         String icon = whyChooseUs.getIcon();
         if (icon != null) {
-            fileService.removeFile(icon);
+            fileService.deleteFile(icon);
         }
         whyChooseUsRepository.deleteById(id);
     }
@@ -105,7 +105,7 @@ public class HomeService {
         Carousel carousel = carouselRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         pojoMapper.updateCarousel(carousel, carouselDto);
         if (carouselImage != null) {
-            fileService.removeFile(carousel.getImage());
+            fileService.deleteFile(carousel.getImage());
             String image = fileService.uploadFile(carouselImage);
             carousel.setImage(image);
         }
@@ -126,7 +126,7 @@ public class HomeService {
     public void deleteCarousel(Long id) {
         Carousel carousel = carouselRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         if (carousel.getImage() != null) {
-            fileService.removeFile(carousel.getImage());
+            fileService.deleteFile(carousel.getImage());
         }
         carouselRepository.deleteById(id);
     }
