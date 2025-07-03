@@ -1,9 +1,6 @@
 package org.example.construction.model.setem;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -21,5 +18,6 @@ public class Setem {
     String description;
     List<String> images;
     String icon;
+    @Column(columnDefinition = "TEXT")
     String content;
 }

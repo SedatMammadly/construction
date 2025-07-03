@@ -36,7 +36,7 @@ public class CertificateController {
         return certificateService.getById(id);
     }
 
-    // UPDATE
+    // UPDATEn
     @PutMapping("/update/{id}")
     public Certificate updateCertificate(@PathVariable Long id,
                                          @RequestPart CertificateDto certificateDto,
