@@ -3,6 +3,7 @@ package org.example.construction.controller.special;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.SpecialDto;
+import org.example.construction.dto.SpecialUpdateDto;
 import org.example.construction.model.Special;
 import org.example.construction.repository.SpecialRepository;
 import org.example.construction.service.SpecialService;
@@ -50,7 +51,7 @@ public class SpecialController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Special> update(
             @PathVariable Long id,
-            @RequestPart("specialDto") SpecialDto specialDto,
+            @RequestPart("request") SpecialUpdateDto specialDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) throws IOException {
         Special updated = specialService.updateSpecial(id, specialDto, images);

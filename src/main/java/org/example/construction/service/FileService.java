@@ -17,10 +17,10 @@ import java.util.*;
 @Service
 public class FileService {
     private final Path storageDirectory;
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("data");
 
     public FileService() throws IOException {
-        this.storageDirectory = Paths.get("uploads");
+        this.storageDirectory = Paths.get("data");
         if (!Files.exists(storageDirectory)) {
             Files.createDirectories(storageDirectory);
         }

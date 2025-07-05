@@ -3,6 +3,7 @@ package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.SpecialDto;
+import org.example.construction.dto.SpecialUpdateDto;
 import org.example.construction.model.Special;
 import org.example.construction.repository.SpecialRepository;
 import org.example.construction.util.SlugUtil;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,17 +40,24 @@ public class SpecialService {
         return specialRepository.findById(id);
     }
 
-    public Special updateSpecial(Long id, SpecialDto specialDto, List<MultipartFile> newImages) throws IOException {
+    public Special updateSpecial(Long id, SpecialUpdateDto specialDto, List<MultipartFile> newImages) throws IOException {
         Special special = specialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Special not found"));
         fileService.deleteFiles(special.getImages());
         special.setName(specialDto.getName());
         special.setContent(specialDto.getContent());
         special.setSlug(SlugUtil.toSlug(specialDto.getName()));
+        List<String>toRemove=new ArrayList<>();
 
+        for (String image : special.getImages()) {
+            if(!specialDto.getImages().contains(image)) {
+                toRemove.add(image);
+            }
+        }
+        fileService.deleteFiles(toRemove);
+        special.setImages(specialDto.getImages());
         if (newImages != null && !newImages.isEmpty()) {
-            List<String> uploadedImages = fileService.uploadFiles(newImages);
-            special.setImages(uploadedImages); // eski fotolar silinmiş sayılır
+            special.getImages().addAll(fileService.uploadFiles(newImages));
         }
 
         return specialRepository.save(special);

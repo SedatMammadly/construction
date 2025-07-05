@@ -1,6 +1,7 @@
 package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.construction.dto.SetemUpdateDto;
 import org.example.construction.dto.setem.SetemDto;
 import org.example.construction.model.setem.Setem;
 import org.example.construction.service.setem.SetemService;
@@ -38,11 +39,11 @@ public class SetemController {
     @PutMapping("/update/{id}")
     public Setem updateSetem(
             @PathVariable Long id,
-            @RequestPart SetemDto dto,
-            @RequestPart MultipartFile icon,
+            @RequestPart SetemUpdateDto setemUpdateDto,
+            @RequestPart(required = false) MultipartFile icon,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        return setemService.update(id, dto, icon, images);
+        return setemService.update(id, setemUpdateDto, icon, images);
     }
 
     @DeleteMapping("/delete/{id}")

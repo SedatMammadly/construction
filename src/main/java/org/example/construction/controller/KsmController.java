@@ -1,9 +1,9 @@
 package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.construction.dto.KsmCardDto;
+import org.example.construction.dto.KsmDto;
+import org.example.construction.dto.KsmUpdateDto;
 import org.example.construction.model.Ksm;
-import org.example.construction.model.News;
 import org.example.construction.repository.KsmRepository;
 import org.example.construction.service.KsmService;
 import org.springframework.http.HttpStatus;
@@ -38,22 +38,22 @@ public class KsmController {
 
     @PostMapping("/add")
     public ResponseEntity<Ksm> addKsmCards(
-            @RequestPart(name = "request") KsmCardDto ksmCardDto,
+            @RequestPart(name = "request") KsmDto ksmDto,
             @RequestPart MultipartFile icon,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        Ksm ksm = ksmService.addKsmCards(ksmCardDto, images, icon);
+        Ksm ksm = ksmService.addKsmCards(ksmDto, images, icon);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Ksm> updateKsmCard(
             @PathVariable int id,
-            @RequestPart(name = "request") KsmCardDto ksmCardDto,
+            @RequestPart(name = "request") KsmUpdateDto ksmUpdateDto,
             @RequestPart(required = false) MultipartFile icon,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        Ksm ksm = ksmService.updateKsmCard(id, ksmCardDto, icon, images);
+        Ksm ksm = ksmService.updateKsmCard(id, ksmUpdateDto, icon, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(ksm);
     }
 

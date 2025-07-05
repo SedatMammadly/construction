@@ -44,27 +44,26 @@ public class NewsService {
     }
 
     public News update(int id, NewsUpdateDto newsUpdateDto, List<MultipartFile> images) throws IOException {
-        News existingNews = newsRepository.findById(id)
+        News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
 
-        existingNews.setTitle(newsUpdateDto.getTitle());
-        existingNews.setParagraph(newsUpdateDto.getParagraph());
-        existingNews.setSlug(SlugUtil.toSlug(newsUpdateDto.getTitle()));
+        news.setSlug(SlugUtil.toSlug(newsUpdateDto.getTitle())); // Use title from DTO
+        List<String> toRemove = new ArrayList<>();
 
-        if (images != null && !images.isEmpty()) {
-            // Eğer eski görseller null değilse, sil ve temizle
-            if (existingNews.getImages() != null) {
-                fileService.deleteFiles(existingNews.getImages());
-                existingNews.getImages().clear(); // koleksiyonu temizle
-            } else {
-                existingNews.setImages(new ArrayList<>()); // null ise initialize et
+        for (String oldImage : news.getImages()) {
+            if (!newsUpdateDto.getImages().contains(oldImage)) {
+                toRemove.add(oldImage);
             }
-
-            // Yeni görselleri yükle ve ekle
-            existingNews.getImages().addAll(fileService.uploadFiles(images));
         }
 
-        return newsRepository.save(existingNews);
+        fileService.deleteFiles(toRemove);
+        pageMapper.updateNewsEntityFromDto(news, newsUpdateDto);
+
+        if (images != null && !images.isEmpty()) {
+            news.getImages().addAll(fileService.uploadFiles(images));
+        }
+
+        return newsRepository.save(news);
     }
 
 

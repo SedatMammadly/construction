@@ -24,6 +24,7 @@ public class Ksm {
     String description;
     @Column(columnDefinition = "TEXT")
     String paragraph;
+    @ElementCollection
     List<String> images;
 
 }

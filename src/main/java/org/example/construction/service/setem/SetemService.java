@@ -1,6 +1,7 @@
 package org.example.construction.service.setem;
 
 import lombok.RequiredArgsConstructor;
+import org.example.construction.dto.SetemUpdateDto;
 import org.example.construction.service.FileService;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class SetemService {
         setemRepository.deleteById(id);
     }
 
-    public Setem update(Long id, SetemDto dto, MultipartFile icon, List<MultipartFile> images) throws IOException {
+    public Setem update(Long id, SetemUpdateDto dto, MultipartFile icon, List<MultipartFile> images) throws IOException {
         Setem setem = setemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Setem not found"));
 
@@ -59,12 +61,28 @@ public class SetemService {
         setem.setDescription(dto.getDescription());
         setem.setContent(dto.getContent());
 
-        if (icon != null && !icon.isEmpty())
+        if (icon != null && !icon.isEmpty()) {
+            fileService.deleteFile(setem.getIcon());
             setem.setIcon(fileService.uploadFile(icon));
+        }
 
-        if (images != null && !images.isEmpty())
-            setem.setImages(fileService.uploadFiles(images));
+        List<String> toRemove = new ArrayList<>();
+
+        for (String image : setem.getImages()) {
+            if (dto.getImages().contains(image)) {
+                toRemove.add(image);
+            }
+        }
+
+        fileService.deleteFiles(toRemove);
+        setem.setImages(dto.getImages());
+
+        if (images != null && !images.isEmpty()) {
+            setem.getImages().addAll(fileService.uploadFiles(images));
+        }
+
 
         return setemRepository.save(setem);
     }
+
 }

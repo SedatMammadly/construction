@@ -1,7 +1,8 @@
 package org.example.construction.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.construction.dto.KsmCardDto;
+import org.example.construction.dto.KsmDto;
+import org.example.construction.dto.KsmUpdateDto;
 import org.example.construction.mapper.PojoMapper;
 import org.example.construction.model.Ksm;
 import org.example.construction.repository.KsmRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,45 +23,59 @@ public class KsmService {
     private final PojoMapper pojoMapper;
 
 
-    public Ksm addKsmCards(KsmCardDto ksmCardDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
+    public Ksm addKsmCards(KsmDto ksmDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
         Ksm ksm = new Ksm();
-        ksm.setTitle(ksmCardDto.getTitle());
-        ksm.setSlug(SlugUtil.toSlug(ksmCardDto.getTitle()));
-        ksm.setDescription(ksmCardDto.getDescription());
-        ksm.setParagraph(ksmCardDto.getParagraph());
+        ksm.setTitle(ksmDto.getTitle());
+        ksm.setSlug(SlugUtil.toSlug(ksmDto.getTitle()));
+        ksm.setDescription(ksmDto.getDescription());
+        ksm.setParagraph(ksmDto.getParagraph());
         ksm.setIcon(fileService.uploadFile(icon));
         ksm.setImages(fileService.uploadFiles(images));
         return ksmRepository.save(ksm);
     }
 
-    public Ksm updateKsmCard(int index, KsmCardDto ksmCardDto, MultipartFile icon, List<MultipartFile> images) throws IOException {
-        Ksm ksm = ksmRepository.findById(index).get();
-        ksm.setTitle(ksmCardDto.getTitle());
-        ksm.setDescription(ksmCardDto.getDescription());
-        ksm.setParagraph(ksmCardDto.getParagraph());
-        ksm.setSlug(SlugUtil.toSlug(ksmCardDto.getTitle()));
+    public Ksm updateKsmCard(int index, KsmUpdateDto ksmUpdateDto, MultipartFile icon, List<MultipartFile> images) throws IOException {
+        Ksm ksm = ksmRepository.findById(index)
+                .orElseThrow(() -> new RuntimeException("Ksm not found"));
 
-        fileService.deleteFile(ksm.getIcon());
-        fileService.deleteFiles(ksm.getImages());
-        ksm.setIcon(fileService.uploadFile(icon));
-        ksm.setImages(fileService.uploadFiles(images));
+        ksm.setSlug(SlugUtil.toSlug(ksmUpdateDto.getTitle()));
+        List<String> currentImages = new ArrayList<>(ksm.getImages());
+        List<String> toRemoveImages = new ArrayList<>();
+        for (String image : currentImages) {
+            if (!ksmUpdateDto.getImages().contains(image)) {
+                toRemoveImages.add(image);
+            }
+        }
+
+        fileService.deleteFiles(toRemoveImages);
+        pojoMapper.updateKsmFromDto(ksm, ksmUpdateDto);
+        List<String> updatedImages = new ArrayList<>(ksmUpdateDto.getImages());
+
+        if (images != null && !images.isEmpty()) {
+            List<String> uploaded = fileService.uploadFiles(images);
+            updatedImages.addAll(uploaded);
+        }
+
+        ksm.setImages(updatedImages);
+
+        if (icon != null) {
+            fileService.deleteFile(ksm.getIcon());
+            ksm.setIcon(fileService.uploadFile(icon));
+        }
 
         return ksmRepository.save(ksm);
     }
+
 
     public void deleteKsmCard(int id) {
         Optional<Ksm> ksmCards = ksmRepository.findById(id);
 
         List<String> imagesList = ksmCards.get().getImages();
         if (imagesList != null) {
-            for (int i = 0; i < imagesList.size(); i++) {
-                String imageFile = imagesList.get(i);
-                fileService.deleteFile(imageFile);
-            }
+            fileService.deleteFiles(imagesList);
         }
         fileService.deleteFile(ksmCards.get().getIcon());
         ksmRepository.deleteById(id);
-
     }
 
 }

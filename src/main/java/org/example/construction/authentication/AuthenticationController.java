@@ -46,12 +46,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgetPassword")
-    public ResponseEntity<String> forgetPassword(@RequestParam String email, @RequestBody ForgetPasswordDto dto) {
+    public ResponseEntity<String> forgetPassword(@RequestParam String email,@Valid @RequestBody ForgetPasswordDto dto) {
         return ResponseEntity.ok(passwordChangeService.forgetPassword(email, dto));
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity<String> resetPassword(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         return ResponseEntity.ok(passwordChangeService.resetPassword(userDetails, resetPasswordRequest));
     }
 

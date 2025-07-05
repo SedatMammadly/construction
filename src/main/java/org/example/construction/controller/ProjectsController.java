@@ -2,6 +2,7 @@ package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ProjectRequest;
+import org.example.construction.dto.ProjectUpdateDto;
 import org.example.construction.model.Projects;
 import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.service.ProjectService;
@@ -46,10 +47,10 @@ public class ProjectsController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Projects> updateProject(
             @PathVariable Integer id,
-            @RequestPart("request") ProjectRequest request,
+            @RequestPart("request") ProjectUpdateDto projectUpdateDto,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
-        Projects project = projectService.updateProject(id, request, images);
+        Projects project = projectService.updateProject(id, projectUpdateDto, images);
         return ResponseEntity.ok(project);
     }
 

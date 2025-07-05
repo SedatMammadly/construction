@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class KsmCardDto {
+public class KsmDto {
     String title;
     String description;
     String paragraph;

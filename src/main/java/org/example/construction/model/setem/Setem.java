@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Setem {
     @Id
@@ -16,6 +17,7 @@ public class Setem {
     Long id;
     String header;
     String description;
+    @ElementCollection
     List<String> images;
     String icon;
     @Column(columnDefinition = "TEXT")
