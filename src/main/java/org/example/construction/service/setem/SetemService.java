@@ -35,7 +35,7 @@ public class SetemService {
                 .orElseThrow(() -> new RuntimeException("Setem not found"));
     }
 
-    public Setem create(SetemDto dto, MultipartFile icon, List<MultipartFile> images) throws IOException {
+    public Setem create(SetemDto dto, MultipartFile icon) throws IOException {
         Setem setem = new Setem();
         setem.setHeader(dto.getHeader());
         setem.setDescription(dto.getDescription());
@@ -43,7 +43,6 @@ public class SetemService {
 
 
         setem.setIcon(fileService.uploadFile(icon));
-        setem.setImages(fileService.uploadFiles(images));
 
 
         return setemRepository.save(setem);
@@ -53,7 +52,7 @@ public class SetemService {
         setemRepository.deleteById(id);
     }
 
-    public Setem update(Long id, SetemUpdateDto dto, MultipartFile icon, List<MultipartFile> images) throws IOException {
+    public Setem update(Long id, SetemUpdateDto dto, MultipartFile icon) throws IOException {
         Setem setem = setemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Setem not found"));
 
@@ -64,21 +63,6 @@ public class SetemService {
         if (icon != null && !icon.isEmpty()) {
             fileService.deleteFile(setem.getIcon());
             setem.setIcon(fileService.uploadFile(icon));
-        }
-
-        List<String> toRemove = new ArrayList<>();
-
-        for (String image : setem.getImages()) {
-            if (dto.getImages().contains(image)) {
-                toRemove.add(image);
-            }
-        }
-
-        fileService.deleteFiles(toRemove);
-        setem.setImages(dto.getImages());
-
-        if (images != null && !images.isEmpty()) {
-            setem.getImages().addAll(fileService.uploadFiles(images));
         }
 
 

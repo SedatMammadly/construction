@@ -39,7 +39,7 @@ public class ManageTeamController {
     public ManageTeam update(
             @PathVariable Long id,
             @RequestPart ManageTeamDto dto,
-            @RequestPart MultipartFile file
+            @RequestPart(required = false) MultipartFile file
     ) throws IOException {
         return service.update(id, dto, file);
     }

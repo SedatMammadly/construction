@@ -1,14 +1,13 @@
 package org.example.construction.model.foreign;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -20,7 +19,8 @@ public class ForeignMission {
     String icon;
     String header;
     String description;
-    @JdbcTypeCode(SqlTypes.JSON)
-    Content content;
+    @Column(columnDefinition = "TEXT")
+    String content;
+    List<String>images;
     String slug;
 }

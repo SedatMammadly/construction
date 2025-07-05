@@ -39,7 +39,7 @@ public class ValuesController {
     public Values update(
             @PathVariable Long id,
             @RequestPart ValuesDto dto,
-            @RequestPart MultipartFile file
+            @RequestPart(required = false) MultipartFile file
     ) throws IOException {
         return service.update(id, dto, file);
     }

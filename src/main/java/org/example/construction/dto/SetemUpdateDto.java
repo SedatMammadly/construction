@@ -10,5 +10,4 @@ public class SetemUpdateDto {
     String header;
     String description;
     String content;
-    List<String> images;
 }

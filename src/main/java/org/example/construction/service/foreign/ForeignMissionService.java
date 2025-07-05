@@ -2,6 +2,7 @@ package org.example.construction.service.foreign;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ForeignMissionDto;
+import org.example.construction.dto.ForeignMissionUpdateDto;
 import org.example.construction.model.foreign.Content;
 import org.example.construction.model.foreign.ForeignMission;
 import org.example.construction.repository.foreign.ForeignRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,38 +23,52 @@ public class ForeignMissionService {
 
     public ForeignMission add(ForeignMissionDto foreignMissionDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
         ForeignMission foreignMission = new ForeignMission();
-        Content content = new Content();
-        content.setImages(fileService.uploadFiles(images));
-        content.setContentWrite(foreignMissionDto.getContent().getContentWrite());
+
+        foreignMission.setImages(fileService.uploadFiles(images));
         foreignMission.setIcon(fileService.uploadFile(icon));
-        foreignMission.setContent(content);
+        foreignMission.setContent(foreignMissionDto.getContent());
         foreignMission.setDescription(foreignMissionDto.getDescription());
         foreignMission.setHeader(foreignMissionDto.getHeader());
         foreignMission.setSlug(SlugUtil.toSlug(foreignMissionDto.getHeader()));
         return foreignRepository.save(foreignMission);
     }
-    public ForeignMission update(Long id, ForeignMissionDto foreignMissionDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
+
+    public ForeignMission update(Long id, ForeignMissionUpdateDto foreignMissionUpdateDto, List<MultipartFile> images, MultipartFile icon) throws IOException {
         ForeignMission foreignMission = foreignRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Foreign mission not found"));
 
-        if (foreignMissionDto.getHeader() != null)
-            foreignMission.setHeader(foreignMissionDto.getHeader());
+        if (foreignMissionUpdateDto.getHeader() != null)
+            foreignMission.setHeader(foreignMissionUpdateDto.getHeader());
 
-        if (foreignMissionDto.getDescription() != null)
-            foreignMission.setDescription(foreignMissionDto.getDescription());
+        if (foreignMissionUpdateDto.getDescription() != null)
+            foreignMission.setDescription(foreignMissionUpdateDto.getDescription());
 
-        if (foreignMissionDto.getContent() != null && foreignMissionDto.getContent().getContentWrite() != null)
-            foreignMission.getContent().setContentWrite(foreignMissionDto.getContent().getContentWrite());
+        if (foreignMissionUpdateDto.getContent() != null)
+            foreignMission.setContent(foreignMissionUpdateDto.getContent());
 
-        if (images != null && !images.isEmpty())
-            foreignMission.getContent().setImages(fileService.uploadFiles(images));
+        // Eski resimleri al
+        List<String> existingImages = foreignMission.getImages() != null
+                ? new ArrayList<>(foreignMission.getImages())
+                : new ArrayList<>();
 
+        // Yeni yüklenen resimler varsa onları da yükle ve ekle
+        if (images != null && !images.isEmpty()) {
+            List<String> uploadedImages = fileService.uploadFiles(images);
+            existingImages.addAll(uploadedImages);
+        }
+
+        // İçeriğe tüm resimleri set et
+        foreignMission.setImages(existingImages);
+
+        // İkon yüklendiyse değiştir
         if (icon != null && !icon.isEmpty())
             foreignMission.setIcon(fileService.uploadFile(icon));
 
+        // Slug güncelle
         foreignMission.setSlug(SlugUtil.toSlug(foreignMission.getHeader()));
 
         return foreignRepository.save(foreignMission);
     }
+
 
 }

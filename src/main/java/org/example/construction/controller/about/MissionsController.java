@@ -39,7 +39,7 @@ public class MissionsController {
     public Missions update(
             @PathVariable Long id,
             @RequestPart MissionsDto dto,
-            @RequestPart MultipartFile file
+            @RequestPart(required = false) MultipartFile file
     ) throws IOException {
         return service.update(id, dto, file);
     }

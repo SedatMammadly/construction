@@ -2,6 +2,7 @@ package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ForeignMissionDto;
+import org.example.construction.dto.ForeignMissionUpdateDto;
 import org.example.construction.model.foreign.ForeignMission;
 import org.example.construction.repository.foreign.ForeignRepository;
 import org.example.construction.service.foreign.ForeignMissionService;
@@ -30,7 +31,7 @@ public class ForeignMissionsController {
 
     @PostMapping("/add")
     public ForeignMission addForeignMission(
-            @RequestPart ForeignMissionDto foreignMissionDto,
+            @RequestPart ForeignMissionUpdateDto foreignMissionUpdateDto,
             @RequestPart List<MultipartFile> images,
             @RequestPart MultipartFile icon
     ) throws IOException {

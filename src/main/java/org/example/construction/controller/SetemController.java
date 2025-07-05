@@ -30,20 +30,18 @@ public class SetemController {
     @PostMapping("/add")
     public Setem addSetem(
             @RequestPart SetemDto dto,
-            @RequestPart MultipartFile icon,
-            @RequestPart(required = false) List<MultipartFile> images
+            @RequestPart MultipartFile icon
     ) throws IOException {
-        return setemService.create(dto, icon, images);
+        return setemService.create(dto, icon );
     }
 
     @PutMapping("/update/{id}")
     public Setem updateSetem(
             @PathVariable Long id,
             @RequestPart SetemUpdateDto setemUpdateDto,
-            @RequestPart(required = false) MultipartFile icon,
-            @RequestPart(required = false) List<MultipartFile> images
+            @RequestPart(required = false) MultipartFile icon
     ) throws IOException {
-        return setemService.update(id, setemUpdateDto, icon, images);
+        return setemService.update(id, setemUpdateDto, icon);
     }
 
     @DeleteMapping("/delete/{id}")

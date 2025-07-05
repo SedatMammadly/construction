@@ -17,8 +17,6 @@ public class Setem {
     Long id;
     String header;
     String description;
-    @ElementCollection
-    List<String> images;
     String icon;
     @Column(columnDefinition = "TEXT")
     String content;

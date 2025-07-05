@@ -1,9 +1,7 @@
 package org.example.construction.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.construction.dto.ourservices.CardDto;
-import org.example.construction.dto.ourservices.HeadCategoryDto;
-import org.example.construction.dto.ourservices.SubCategoryDto;
+import org.example.construction.dto.ourservices.*;
 import org.example.construction.model.service.Card;
 import org.example.construction.model.service.HeadCategory;
 import org.example.construction.model.service.SubCategory;
@@ -63,7 +61,7 @@ public class OurServicesController {
     @PutMapping("/card/update/{id}")
     public Card updateCard(
             @PathVariable Long id,
-            @RequestPart CardDto cardDto,
+            @RequestPart CardUpdateDto cardDto,
             @RequestPart MultipartFile mainImage,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
@@ -146,7 +144,7 @@ public class OurServicesController {
     @PutMapping("/sub-category/update/{id}")
     public ResponseEntity<SubCategory> updateSubCategory(
             @PathVariable Long id,
-            @RequestBody String newName
+            @RequestBody NewNameDto newNameDto
     ) {
         Optional<SubCategory> subCategoryOpt = subCategoryRepository.findById(id);
 
@@ -160,12 +158,12 @@ public class OurServicesController {
         // kartların subcategory isimlerini de güncelle
         List<Card> cards = cardRepository.findBySubCategory(oldName);
         for (Card card : cards) {
-            card.setSubCategory(newName);
+            card.setSubCategory(newNameDto.getNewName());
             cardRepository.save(card);
         }
 
-        subCategory.setName(newName);
-        subCategory.setSlug(SlugUtil.toSlug(newName));
+        subCategory.setName(newNameDto.getNewName());
+        subCategory.setSlug(SlugUtil.toSlug(newNameDto.getNewName()));
         subCategoryRepository.save(subCategory);
 
         return ResponseEntity.ok(subCategory);
