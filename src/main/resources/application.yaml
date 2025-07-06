@@ -2,8 +2,8 @@ spring:
   application:
     name: construction
   datasource:
-    url: jdbc:postgresql://localhost:5434/Construction
-#    url: jdbc:postgresql://construction:5432/Construction
+#    url: jdbc:postgresql://localhost:5434/Construction
+    url: jdbc:postgresql://construction:5432/Construction
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
@@ -13,13 +13,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   data:
     redis:
-      host: localhost
-      port: 6380
-#      host: redis
-#      port: 6379
+#      host: localhost
+#      port: 6380
+      host: redis
+      port: 6379
       password: construction-redis-p@ss
       connect-timeout: 60000
       client-type: lettuce

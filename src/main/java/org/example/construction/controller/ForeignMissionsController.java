@@ -52,10 +52,10 @@ public class ForeignMissionsController {
     @PutMapping("/update/{id}")
     public ForeignMission updateForeignMission(
             @PathVariable Long id,
-            @RequestPart ForeignMissionUpdateDto foreignMissionDto,
+            @RequestPart ForeignMissionUpdateDto foreignMissionUpdateDto,
             @RequestPart(required = false) List<MultipartFile> images,
             @RequestPart(required = false) MultipartFile icon
     ) throws IOException {
-        return foreignMissionService.update(id, foreignMissionDto, images, icon);
+        return foreignMissionService.update(id, foreignMissionUpdateDto, images, icon);
     }
 }
