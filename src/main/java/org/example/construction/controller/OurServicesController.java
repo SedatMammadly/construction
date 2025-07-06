@@ -30,7 +30,7 @@ public class OurServicesController {
     private final CardRepository cardRepository;
     private final SubCategoryRepository subCategoryRepository;
 
-    ////////////////////// CARD //////////////////////
+    /// /////////////////// CARD //////////////////////
 
     @PostMapping("/card/add")
     public Card addCard(
@@ -83,7 +83,7 @@ public class OurServicesController {
         return cardService.getCardsBySubCategorySlug(subCategorySlug);
     }
 
-    ////////////////////// HEAD CATEGORY //////////////////////
+    /// /////////////////// HEAD CATEGORY //////////////////////
 
     @PostMapping("/head-category/add")
     public HeadCategory addHeadCategory(@RequestBody HeadCategoryDto headCategoryDto) {
@@ -122,7 +122,7 @@ public class OurServicesController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    ////////////////////// SUB CATEGORY //////////////////////
+    /// /////////////////// SUB CATEGORY //////////////////////
 
     @PostMapping("/sub-category/add")
     public SubCategory addSubCategory(@RequestBody SubCategoryDto subCategoryDto) {
@@ -144,7 +144,7 @@ public class OurServicesController {
     @PutMapping("/sub-category/update/{id}")
     public ResponseEntity<SubCategory> updateSubCategory(
             @PathVariable Long id,
-            @RequestBody String newName
+            @RequestBody SubCategoryDto subCategoryDto
     ) {
         Optional<SubCategory> subCategoryOpt = subCategoryRepository.findById(id);
 
@@ -158,12 +158,16 @@ public class OurServicesController {
         // kartların subcategory isimlerini de güncelle
         List<Card> cards = cardRepository.findBySubCategory(oldName);
         for (Card card : cards) {
-            card.setSubCategory(newName);
+            card.setSubCategory(subCategoryDto.getName());
+            card.setSubCategorySlug(SlugUtil.toSlug(subCategoryDto.getName()));
+            card.setHeadCategory(subCategoryDto.getHeadCategory());
+            card.setHeadCategorySlug(SlugUtil.toSlug(subCategoryDto.getHeadCategory()));
             cardRepository.save(card);
         }
-
-        subCategory.setName(newName);
-        subCategory.setSlug(SlugUtil.toSlug(newName));
+        subCategory.setHeadCategory(subCategoryDto.getHeadCategory());
+        subCategory.setName(subCategoryDto.getName());
+        subCategory.setSlug(SlugUtil.toSlug(subCategoryDto.getName()));
+        subCategory.setHeadCategorySlug(SlugUtil.toSlug(subCategoryDto.getHeadCategory()));
         subCategoryRepository.save(subCategory);
 
         return ResponseEntity.ok(subCategory);

@@ -12,4 +12,6 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory,Long> {
     Optional<SubCategory> findBySlug(String slug);
 
     List<SubCategory> findByHeadCategorySlug(String headSlug);
+
+    List<SubCategory> findByHeadCategory(String name);
 }
