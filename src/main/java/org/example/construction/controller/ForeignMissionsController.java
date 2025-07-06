@@ -31,7 +31,7 @@ public class ForeignMissionsController {
 
     @PostMapping("/add")
     public ForeignMission addForeignMission(
-            @RequestPart ForeignMissionUpdateDto foreignMissionUpdateDto,
+            @RequestPart ForeignMissionDto foreignMissionDto,
             @RequestPart List<MultipartFile> images,
             @RequestPart MultipartFile icon
     ) throws IOException {
@@ -52,7 +52,7 @@ public class ForeignMissionsController {
     @PutMapping("/update/{id}")
     public ForeignMission updateForeignMission(
             @PathVariable Long id,
-            @RequestPart ForeignMissionDto foreignMissionDto,
+            @RequestPart ForeignMissionUpdateDto foreignMissionDto,
             @RequestPart(required = false) List<MultipartFile> images,
             @RequestPart(required = false) MultipartFile icon
     ) throws IOException {

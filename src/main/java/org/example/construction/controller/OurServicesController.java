@@ -35,7 +35,7 @@ public class OurServicesController {
     @PostMapping("/card/add")
     public Card addCard(
             @RequestPart CardDto cardDto,
-            @RequestPart MultipartFile mainImage,
+            @RequestPart(required = false) MultipartFile mainImage,
             @RequestPart(required = false) List<MultipartFile> images
     ) throws IOException {
         return cardService.createCard(cardDto, mainImage, images);
@@ -144,7 +144,7 @@ public class OurServicesController {
     @PutMapping("/sub-category/update/{id}")
     public ResponseEntity<SubCategory> updateSubCategory(
             @PathVariable Long id,
-            @RequestBody NewNameDto newNameDto
+            @RequestBody String newName
     ) {
         Optional<SubCategory> subCategoryOpt = subCategoryRepository.findById(id);
 
@@ -158,12 +158,12 @@ public class OurServicesController {
         // kartların subcategory isimlerini de güncelle
         List<Card> cards = cardRepository.findBySubCategory(oldName);
         for (Card card : cards) {
-            card.setSubCategory(newNameDto.getNewName());
+            card.setSubCategory(newName);
             cardRepository.save(card);
         }
 
-        subCategory.setName(newNameDto.getNewName());
-        subCategory.setSlug(SlugUtil.toSlug(newNameDto.getNewName()));
+        subCategory.setName(newName);
+        subCategory.setSlug(SlugUtil.toSlug(newName));
         subCategoryRepository.save(subCategory);
 
         return ResponseEntity.ok(subCategory);
