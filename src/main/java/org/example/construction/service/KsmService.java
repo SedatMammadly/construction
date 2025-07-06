@@ -29,7 +29,9 @@ public class KsmService {
         ksm.setSlug(SlugUtil.toSlug(ksmDto.getTitle()));
         ksm.setDescription(ksmDto.getDescription());
         ksm.setParagraph(ksmDto.getParagraph());
-        ksm.setIcon(fileService.uploadFile(icon));
+        if (icon != null && !icon.isEmpty()) {
+            ksm.setIcon(fileService.uploadFile(icon));
+        }
         ksm.setImages(fileService.uploadFiles(images));
         return ksmRepository.save(ksm);
     }
@@ -58,7 +60,7 @@ public class KsmService {
 
         ksm.setImages(updatedImages);
 
-        if (icon != null) {
+        if (icon != null && !icon.isEmpty()) {
             fileService.deleteFile(ksm.getIcon());
             ksm.setIcon(fileService.uploadFile(icon));
         }

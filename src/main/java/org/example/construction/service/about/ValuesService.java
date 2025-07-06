@@ -28,12 +28,19 @@ public class ValuesService {
     }
 
     public Values update(Long id, ValuesDto dto, MultipartFile file) throws IOException {
-        Values value = repository.findById(id).orElseThrow(() -> new RuntimeException("Value not found"));
-        value.setIcon(fileService.uploadFile(file));
+        Values value = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Value not found"));
+
+        if (file != null && !file.isEmpty()) {
+            value.setIcon(fileService.uploadFile(file));
+        }
+
         value.setTitle(dto.getTitle());
         value.setParagraph(dto.getParagraph());
+
         return repository.save(value);
     }
+
 
     public void delete(Long id) {
         repository.deleteById(id);
