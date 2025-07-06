@@ -37,8 +37,11 @@ public class ForeignMissionService {
         ForeignMission foreignMission = foreignRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Foreign mission not found"));
 
-        if (foreignMissionUpdateDto.getHeader() != null)
+        // Slug güncelle (header üzerinden)
+        if (foreignMissionUpdateDto.getHeader() != null) {
             foreignMission.setHeader(foreignMissionUpdateDto.getHeader());
+            foreignMission.setSlug(SlugUtil.toSlug(foreignMissionUpdateDto.getHeader()));
+        }
 
         if (foreignMissionUpdateDto.getDescription() != null)
             foreignMission.setDescription(foreignMissionUpdateDto.getDescription());
@@ -51,24 +54,36 @@ public class ForeignMissionService {
                 ? new ArrayList<>(foreignMission.getImages())
                 : new ArrayList<>();
 
-        // Yeni yüklenen resimler varsa onları da yükle ve ekle
-        if (images != null && !images.isEmpty()) {
-            List<String> uploadedImages = fileService.uploadFiles(images);
-            existingImages.addAll(uploadedImages);
+        // Silinecek resimleri bul (DTO'da olmayanları sil)
+        List<String> toRemove = new ArrayList<>();
+        for (String oldImage : existingImages) {
+            if (!foreignMissionUpdateDto.getImages().contains(oldImage)) {
+                toRemove.add(oldImage);
+            }
         }
 
-        // İçeriğe tüm resimleri set et
-        foreignMission.setImages(existingImages);
+        // Eski dosyaları sil
+        fileService.deleteFiles(toRemove);
 
-        // İkon yüklendiyse değiştir
-        if (icon != null && !icon.isEmpty())
+        // Yeni resim listesi = DTO'dan gelenler (korunacaklar)
+        List<String> updatedImages = new ArrayList<>(foreignMissionUpdateDto.getImages());
+
+        // Yeni yüklenen dosyaları ekle
+        if (images != null && !images.isEmpty()) {
+            updatedImages.addAll(fileService.uploadFiles(images));
+        }
+
+        // Güncellenmiş resim listesini set et
+        foreignMission.setImages(updatedImages);
+
+        // Icon yüklendiyse değiştir
+        if (icon != null && !icon.isEmpty()) {
             foreignMission.setIcon(fileService.uploadFile(icon));
-
-        // Slug güncelle
-        foreignMission.setSlug(SlugUtil.toSlug(foreignMission.getHeader()));
+        }
 
         return foreignRepository.save(foreignMission);
     }
+
 
 
 }
