@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.construction.dto.ourservices.HeadCategoryDto;
 import org.example.construction.model.service.Card;
 import org.example.construction.model.service.HeadCategory;
+import org.example.construction.model.service.SubCategory;
 import org.example.construction.repository.service.CardRepository;
 import org.example.construction.repository.service.HeadCategoryRepository;
+import org.example.construction.repository.service.SubCategoryRepository;
 import org.example.construction.util.SlugUtil;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class HeadCategoryService {
 
     private final HeadCategoryRepository headCategoryRepository;
     private final CardRepository cardRepository;
+    private final SubCategoryRepository subCategoryRepository;
 
 
     // Create
@@ -46,7 +49,14 @@ public class HeadCategoryService {
         List<Card> cards = cardRepository.findByHeadCategory(headCategory.getName());
         for (Card card : cards) {
             card.setHeadCategory(headCategoryDto.getName());
+            card.setHeadCategorySlug(SlugUtil.toSlug(headCategoryDto.getName()));
             cardRepository.save(card);
+        }
+        List<SubCategory> subCategories = subCategoryRepository.findByHeadCategory(headCategory.getName());
+        for (SubCategory subCategory : subCategories) {
+            subCategory.setHeadCategory(headCategoryDto.getName());
+            subCategory.setHeadCategorySlug(SlugUtil.toSlug(headCategoryDto.getName()));
+            subCategoryRepository.save(subCategory);
         }
         headCategory.setDescription(headCategoryDto.getDescription());
         headCategory.setName(headCategoryDto.getName());
