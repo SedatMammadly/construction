@@ -29,9 +29,11 @@ public class CertificateService {
      public Certificate update(Long id, CertificateDto certificateDto,MultipartFile file) throws IOException {
         Certificate existing = repository.findById(id).orElseThrow(() ->
                 new RuntimeException("Certificate not found with id: " + id));
-        fileService.deleteFile(existing.getImage());
+
         existing.setName(certificateDto.getName());
-        existing.setImage(fileService.uploadFile(file));
+         if (file != null && !file.isEmpty()) {
+             existing.setImage(fileService.uploadFile(file));
+         }
         return repository.save(existing);
     }
 

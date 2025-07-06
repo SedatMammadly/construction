@@ -29,8 +29,7 @@ public class MissionsService {
 
     public Missions update(Long id, MissionsDto dto, MultipartFile file) throws IOException {
         Missions missions = repository.findById(id).orElseThrow(() -> new RuntimeException("Mission not found"));
-        fileService.deleteFile(missions.getIcon());
-        if (file != null && !file.isEmpty()) {
+         if (file != null && !file.isEmpty()) {
             missions.setIcon(fileService.uploadFile(file));
         }
         missions.setTitle(dto.getTitle());
