@@ -65,9 +65,10 @@ public class CardService {
             card.setHeader(updatedCard.getHeader());
             card.setDescription(updatedCard.getDescription());
             card.setSubCategory(updatedCard.getSubCategory());
-            card.setSlug(SlugUtil.toSlug(updatedCard.getSubCategory()));
+            card.setSlug(SlugUtil.toSlug(updatedCard.getHeader()));
             card.setHeadCategory(updatedCard.getHeadCategory());
-
+            card.setSubCategorySlug(SlugUtil.toSlug(updatedCard.getSubCategory()));
+            card.setHeadCategorySlug(SlugUtil.toSlug(card.getHeadCategory()));
             // İçerik bilgisi
             Content content = new Content();
             content.setContentWrite(updatedCard.getContent().getContentWrite());
