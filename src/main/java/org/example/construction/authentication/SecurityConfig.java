@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/contact/get/","/api/v1/contact/getAll", "api/v1/auth/sendVerificationCode","/api/v1/contact/apply").permitAll()
                         .requestMatchers("/api/v1/files/**","/api/v1/foreign/getAll", "/api/v1/foreign/get/**","/api/v1/foreign/getBySlug/**").permitAll()
                         .requestMatchers("/api/v1/home/all","/api/v1/ksm/getAll", "/api/v1/ksm/get/**","/api/v1/ksm/getBySlug/**").permitAll()
-                        .requestMatchers("/api/v1/news/getAll", "/api/v1/news/getAllNews","/api/v1/news/get/**", "/api/v1/news/getBySlug/**").permitAll()
+                        .requestMatchers("/api/v1/news/getAll", "/api/v1/news/get10News","/api/v1/news/get/**", "/api/v1/news/getBySlug/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/service/card/getBySlug/**",
                                 "/api/v1/service/card/get/**",

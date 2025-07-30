@@ -28,12 +28,12 @@ public class NewsController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<News>> getAll() {
-        return ResponseEntity.ok(newsService.getAll());
-    }
+        return ResponseEntity.ok(newsRepository.findAll());    }
 
-    @GetMapping("/getAllNews")
+    @GetMapping("/get10News")
     public ResponseEntity<List<News>> getAllNews() {
-        return ResponseEntity.ok(newsRepository.findAll());
+
+        return ResponseEntity.ok(newsService.getAll());
     }
 
     @GetMapping("/getBySlug/{slug}")
