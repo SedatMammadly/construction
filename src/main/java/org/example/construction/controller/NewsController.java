@@ -31,6 +31,11 @@ public class NewsController {
         return ResponseEntity.ok(newsService.getAll());
     }
 
+    @GetMapping("/getAllNews")
+    public ResponseEntity<List<News>> getAllNews() {
+        return ResponseEntity.ok(newsRepository.findAll());
+    }
+
     @GetMapping("/getBySlug/{slug}")
     public ResponseEntity<News> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(newsRepository.findBySlug(slug));

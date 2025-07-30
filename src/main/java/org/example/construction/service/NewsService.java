@@ -22,7 +22,7 @@ public class NewsService {
     private final FileService fileService;
 
     public List<News> getAll() {
-        return newsRepository.findAll();
+        return newsRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
     public News getById(int id) {
