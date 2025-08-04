@@ -28,7 +28,7 @@ public class NewsController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<News>> getAll() {
-        return ResponseEntity.ok(newsRepository.findAll());    }
+        return ResponseEntity.ok(newsRepository.findAllByOrderByCreatedAtDesc());    }
 
     @GetMapping("/get10News")
     public ResponseEntity<List<News>> getAllNews() {

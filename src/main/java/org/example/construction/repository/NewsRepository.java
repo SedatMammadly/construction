@@ -11,5 +11,7 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
 
     List<News> findTop10ByOrderByCreatedAtDesc();
 
+    List<News> findAllByOrderByCreatedAtDesc();
+
     News findBySlug(String slug);
 }
