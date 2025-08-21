@@ -7,6 +7,7 @@ import org.example.construction.mapper.PojoMapper;
 import org.example.construction.model.Projects;
 import org.example.construction.repository.ProjectsRepository;
 import org.example.construction.util.SlugUtil;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,7 +86,7 @@ public class ProjectService {
     }
 
     public List<Projects> getAllProjects() {
-        return projectsRepository.findAll();
+        return projectsRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
 
