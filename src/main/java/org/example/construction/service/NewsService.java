@@ -22,7 +22,7 @@ public class NewsService {
     private final FileService fileService;
 
     public List<News> getAll() {
-        return newsRepository.findTop10ByOrderByCreatedAtDesc();
+        return newsRepository.findTop10ByOrderByCreatedAtAsc();
     }
 
     public News getById(int id) {
@@ -47,7 +47,7 @@ public class NewsService {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
 
-        news.setSlug(SlugUtil.toSlug(newsUpdateDto.getTitle())); // Use title from DTO
+        news.setSlug(SlugUtil.toSlug(newsUpdateDto.getTitle()));
         List<String> toRemove = new ArrayList<>();
 
         for (String oldImage : news.getImages()) {
