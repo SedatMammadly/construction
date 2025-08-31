@@ -7,6 +7,7 @@ import org.example.construction.model.News;
 import org.example.construction.model.Special;
 import org.example.construction.repository.NewsRepository;
 import org.example.construction.service.NewsService;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,8 @@ public class NewsController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<News>> getAll() {
-        return ResponseEntity.ok(newsRepository.findAllByOrderByCreatedAtDesc());    }
+        return ResponseEntity.ok(newsRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt")));
+    }
 
     @GetMapping("/get10News")
     public ResponseEntity<List<News>> get10News() {
