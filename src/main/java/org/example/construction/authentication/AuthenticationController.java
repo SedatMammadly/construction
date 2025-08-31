@@ -56,8 +56,9 @@ public class AuthenticationController {
     }
 
     @PutMapping("/reset/email")
-    public ResponseEntity<AuthResponse> resetEmail(@RequestParam(name = "param") String email, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.ok(authenticationService.resetEmail(email, userDetails));
+    public ResponseEntity<AuthResponse> resetEmail(@RequestParam(name = "param") String email, @RequestHeader("Authorization") String token) {
+        System.out.println("Salamlar");
+        return ResponseEntity.ok(authenticationService.resetEmail(email, token));
     }
 
     @PostMapping("/verify")

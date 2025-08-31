@@ -11,11 +11,13 @@ import org.example.construction.dto.VerificationRequest;
 import org.example.construction.enums.Role;
 import org.example.construction.model.User;
 import org.example.construction.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -68,7 +70,7 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()));
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(()->new RuntimeException("User not found"));
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         String accessToken = jwtService.generateAccessToken(user.getUsername(), user.getRole().name());
         String refreshToken = jwtService.generateRefreshToken(user.getUsername());
 
@@ -94,19 +96,46 @@ public class AuthenticationService {
         return verificationCodeService.codeIsValid(verificationRequest.getVerificationCode(), verificationRequest.getEmail());
     }
 
-    public AuthResponse resetEmail(String email, CustomUserDetails userDetails) {
-        User user = null;
-        if (userDetails != null) {
-            user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-            user.setUsername(email);
-        }
+    public AuthResponse resetEmail(String email, String token) {
+        try {
+            if (token == null || !token.startsWith("Bearer ")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Authorization header");
+            }
 
-        String accessToken = jwtService.generateAccessToken(user.getUsername(), user.getRole().name());
-        String refreshToken = jwtService.generateRefreshToken(user.getUsername());
-        userRepository.save(user);
-        return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+            token = token.substring(7); // "Bearer " prefiksini çıxar
+            String username = jwtService.extractUsername(token);
+
+            if (username == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+            }
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+            // Email artıq varsa, 400 qaytar
+            if (userRepository.existsByUsername(email)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already in use");
+            }
+
+            // Update email və username
+            user.setEmail(email);
+            user.setUsername(email);
+            userRepository.save(user);
+
+            // Tokenləri yenilə
+            String accessToken = jwtService.generateAccessToken(user.getUsername(), user.getRole().name());
+            String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+
+            return AuthResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to reset email: " + e.getMessage());
+        }
     }
+
+
+
 }

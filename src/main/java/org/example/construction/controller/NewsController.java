@@ -31,9 +31,9 @@ public class NewsController {
         return ResponseEntity.ok(newsRepository.findAllByOrderByCreatedAtDesc());    }
 
     @GetMapping("/get10News")
-    public ResponseEntity<List<News>> getAllNews() {
+    public ResponseEntity<List<News>> get10News() {
 
-        return ResponseEntity.ok(newsService.getAll());
+        return ResponseEntity.ok(newsService.get10News());
     }
 
     @GetMapping("/getBySlug/{slug}")

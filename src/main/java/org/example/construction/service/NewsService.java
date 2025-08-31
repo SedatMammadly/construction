@@ -21,7 +21,7 @@ public class NewsService {
     private final PageMapper pageMapper;
     private final FileService fileService;
 
-    public List<News> getAll() {
+    public List<News> get10News() {
         return newsRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
